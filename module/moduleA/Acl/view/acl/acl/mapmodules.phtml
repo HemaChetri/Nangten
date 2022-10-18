@@ -1,0 +1,122 @@
+<?php
+	/**
+	 * chophel@athang.com -- 2022
+	 * View -- of Acl/AclController/mapmodulesAction
+	 */
+	$this->headTitle($this->title);
+?>
+<?php $modules = $this->moduleObj->getAllExcept('1');?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(27,28,29,30)); ?>
+					<div class="card-header"></div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Role</th>
+									<?php foreach ($modules as $title): ?>
+										<th class="no-sort"> <?php echo $title['module'];?></th>
+									<?php endforeach; ?>
+								</tr>
+							</thead>
+							<tbody>	
+								<?php $i=1+(($page-1)*20); foreach ($roles as $role):?>
+								<tr>
+									<td> <?php echo $i++; ?></td>
+									<td> <?php echo "<strong>".$role['role'];?> </strong></td>
+									
+									<?php $check = $this->button(5);
+									foreach ($modules as $module): ?>
+									<td class="text-center">
+										<?php if($this->rolemoduleObj->checkmapped($role['id'], $module['id'])): ?> 	
+											<a href="<?php echo ($check)?$this->url('acl', array( 'action' => 'mapmodules', 'id' => $role['id'].'_'.$page, 'role'=>$module['id'], 'task' =>'unmap')):'#'; ?>" title="Unmap the module"> 
+												<span class='icon ti ti-check text-green'></span>
+											</a>
+										<?php else: ?>
+											<a href="<?php echo ($check)?$this->url('acl', array( 'action' => 'mapmodules', 'id' => $role['id'].'_'.$page, 'role'=>$module['id'], 'task' =>'map')):'#'; ?>" title="Map the module"> 
+												<span class='icon ti ti-x text-red'></span>
+											</a>
+										<?php endif; ?>
+									</td>
+									<?php endforeach; ?>							
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->roles,'Sliding','search_pagination.phtml', 
+							array('route' => 'button/paginator','action'=>'button','id'=>$this->resource,'role'=>'0','task'=>'0'));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('document').ready(function(){
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

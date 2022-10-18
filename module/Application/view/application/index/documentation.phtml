@@ -1,0 +1,34 @@
+<?php
+/**
+ * View -- of Application/IndexController/documentationAction
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?>
+<div class="container-xl">
+	<!-- Page title -->
+	<div class="page-header d-print-none">
+		<div class="row align-items-center">
+			<div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">Documentation</div>
+                <h2 class="page-title">User Manual</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="card card-lg">
+			<div class="card-body">
+				<div class="markdown">
+					<h3>Getting started</h3>
+					<ul class="list-unstyled">
+						<li><a href="<?php echo $this->basePath() . '/manual/manual.pdf' ?>" target="_blank">Click Here to download user manual</a></li>
+					</ul>
+					<embed src="<?php echo $this->basePath() . '/manual/manual.pdf';?>" type="application/pdf" width="100%" height="500px" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

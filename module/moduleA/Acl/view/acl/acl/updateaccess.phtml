@@ -1,0 +1,215 @@
+<?php 
+/**
+ * View -- of Acl/AclController/updateaccess
+ * chophel@athang.com -- 2022
+ */
+$this->headTitle($this->title);
+?>
+<form id="#form" method="post" action="<?php echo $this->url('acl', array('action' => 'updateaccess','id'=>$data['selected_data'])); ?>"  enctype="multipart/form-data" >                  
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">
+		<div class="row">
+			<div class="form-group mb-3 col-lg-6">
+				<label for="process" class="form-label">Process</label>
+				<select id="process" name="process" class="form-select" data-placeholder="Select" disabled>
+					<option value=""></option>
+					<?php if($data['resource']!='-1'):foreach($this->processObj->get(array('resource'=>$data['resource'])) as $process):?>
+						<option value="<?php echo $process['id']?>" <?php echo ($data['process']==$process['id'])?'selected':'';?>>
+							<?php echo $process['process'];?></option>
+					<?php endforeach;endif;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-6">
+				<label for="role" class="form-label">Role</label>
+				<select id="role" name="role" class="form-select" data-placeholder="Select" disabled>
+					<option value=""></option>
+					<?php foreach($this->roleObj->getAllExcept('100') as $role):?>
+						<option value="<?php echo $role['id']?>" <?php echo ($data['role']==$role['id'])?'selected':'';?>>
+							<?php echo $role['role'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<?php 
+		$location = '0';
+		$only_if_creator = '0';
+		$status = '0';
+		$permission_level =  '0';
+		$location_signal = 'info';
+		$only_if_creator_signal = 'info';
+		$status_signal = 'info';
+		$processes = $this->processObj->get($data['process']);
+		foreach($processes as $process);
+		$location_disabled = ($process['location']!='1')?'disabled':'';
+		$only_if_creator_disabled = ($process['only_if_creator']!='1')?'disabled':'';
+		$status_disabled = ($process['status']!='1')?'disabled':'';
+		$permission_level_disabled = ($process['status']!='1')?'disabled':'';
+		
+		$roleprocesses = $this->roleprocessObj->get(array('role'=>$data['role'],'process'=>$data['process']));
+		if(sizeof($roleprocesses)>0):
+			foreach($roleprocesses as $row);
+			$location = $row['location'];
+			$only_if_creator = $row['only_if_creator'];
+			$status = $row['status'];
+			$permission_level =  $row['permission_level'];
+			$location_signal = ($row['location']=='1')?'success':'info';
+			$only_if_creator_signal = ($row['only_if_creator']=='1')?'success':'info';
+			$status_signal = ($row['status']=='1')?'success':'info';
+		endif;?>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-4"> 
+				<label class="form-label" for="location">Location Permission 
+				<?php if($process['location']=='1'):?><span class="badge bg-<?php echo $location_signal;?>"><strong> L </strong></span><?php endif;?>
+				</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="location" id="location" value="1" <?php echo ($location=='1')?'checked':'';?> <?php echo $location_disabled;?>/>
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="location" id="location" value="0" <?php echo ($location=='0')?'checked':'';?> <?php echo $location_disabled;?>/>
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-4"> 
+				<label class="form-label" for="only_if_creator">OnlyIfCreatorPermission
+				<?php if($process['only_if_creator']=='1'):?><span class="badge bg-<?php echo $only_if_creator_signal;?>"><strong> C </strong></span><?php endif;?>
+				</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="only_if_creator" id="only_if_creator" value="1" <?php echo ($only_if_creator=='1')?'checked':'';?> <?php echo $only_if_creator_disabled;?>/>
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="only_if_creator" id="only_if_creator" value="0" <?php echo ($only_if_creator=='0')?'checked':'';?> <?php echo $only_if_creator_disabled;?>/>
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-4"> 
+				<label class="form-label" for="status">Status Permission
+				<?php if($process['status']=='1'):?><span class="badge bg-<?php echo $status_signal;?>"><strong> S </strong></span><?php endif;?>
+				</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="1" <?php echo ($status=='1')?'checked':'';?> <?php echo $status_disabled;?>/>
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="0" <?php echo ($status=='0')?'checked':'';?> <?php echo $status_disabled;?>/>
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<?php $permission_array = explode(",", $process['permission_level']);
+		$permission_status = array();
+		for($i=0;$i<sizeof($permission_array);$i++):
+			$status_data = array(
+				'status_id' => $permission_array[$i],
+				'status'    => ($permission_array[$i]>0)?$this->statusObj->getColumn($permission_array[$i],'status'):'',
+			);
+			array_push($permission_status,$status_data);
+		endfor;
+		$status_array = explode(",", $permission_level);?>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-12">
+				<label class="form-label" for="permission_level">Permission Level</label>
+				<select multiple class="form-select" name="permission_level[]" id="permission_level" data-placeholder="Select" <?php echo $permission_level_disabled;?> >
+					<?php foreach($permission_status as $status_row):?>
+					<option value="<?php echo $status_row['status_id'];?>" <?php echo (in_array($status_row['status_id'],$status_array))?'selected':'';?>>
+						<?php echo $status_row['status'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<input type="hidden" name="process_id" id="process_id" value="<?php echo $data['process'];?>" />
+		<input type="hidden" name="role_id" id="role_id" value="<?php echo $data['role'];?>" />
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	$('select#process').on('change',function(){
+		$('input#process_id').val($(this).val());
+	});
+	$('select#role').on('change',function(){
+		$('input#role_id').val($(this).val());
+	});
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			process: {
+				validators: {
+					notEmpty: {
+						message: 'Please select process.'
+					}
+				}
+			},
+			role: {
+				validators: {
+					notEmpty: {
+						message: 'Please select role.'
+					}
+				}
+			},
+			location: {
+				validators: {
+					notEmpty: {
+						message: 'Please select location permission.'
+					}
+				}
+			},
+			only_if_creator: {
+				validators: {
+					notEmpty: {
+						message: 'Please select only if creator permission.'
+					}
+				}
+			},
+			status: {
+				validators: {
+					notEmpty: {
+						message: 'Please select status permission.'
+					}
+				}
+			},
+			'permission_level[]': {
+				validators: {
+					choice: {
+						min: 0,
+						max: 10,
+						message: 'Please select permission level.',
+					},
+				}
+			},
+		},
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    }).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+});
+</script>
+

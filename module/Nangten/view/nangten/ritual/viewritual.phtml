@@ -1,0 +1,184 @@
+<?php 
+/**
+ * View -- of Nangten/ritualController/viewritualAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+  <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+  <div class="w3-modal-content w3-animate-zoom">
+    <img id="img01" style="width:100%">
+  </div>
+</div>
+<?php foreach($ritual as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+	   <div class="card">
+			<div class="card-header">
+				<div class="col-2">
+					<?php echo $this->button(3,$row['id']);?>
+				</div>
+				<div class="col-2">
+					<?php echo $this->button(6,$row['id'],'','261');?>
+				</div>
+				<div class="col-2">
+					<?php echo $this->button(6,$row['id'],'','259');?>
+				</div>
+			</div>
+		</div>
+		<div class="card" id="print-content">
+			<div class="card-header">
+				<div class="col-auto ms-auto no-print">
+					<div class="btn-list">
+						<span data-bs-toggle='tooltip' data-bs-placement='top' title='PDF Print'>
+							<a class='btn btn-light btn-sm' id="print">
+							<i class="icon ti ti-printer"></i>PDF</a></span>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+			<table class="table table-sm  card-table text-wrap" id="dataTables">
+					<tbody>
+						<tr>
+							<td class="text-center">
+							   <img src="<?php echo $this->basePath() . '/images/druk.png';?>" class="card-img-top img-fluid" style="height:150px;width:auto;";alt="..." onclick="onClick(this)" class="w3-hover-opacity">
+							</td>
+							<td class="text-center">
+								<h1>ཅ་རྙིང་འཛིན་སྐྱོང་སྡེ་ཚན།</h1>
+								<h2>སྲོལ་འཛིན་ལས་ཁུངས།</h2>
+								<h3><?php echo $this->groupObj->getColumn($row['TenGroupId'],'GroupNameDz')?></h3>
+							</td>
+							<td class="text-center">
+							<img src="<?php echo $this->basePath()."/upload/ritual/".$row['TenImage'];?>" class="card-img-top img-fluid" style="height:150px;width:100px;";alt="..." onclick="onClick(this)" class="w3-hover-opacity">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-body">
+				<table class="table table-sm table-bordered card-table text-wrap" id="dataTables">
+					<tbody>
+						<tr>
+							<td>ཡང།:&nbsp &nbsp<?php echo $row['TenId'];?></td>
+							<td>སྤྱྀ་ཆཻས།:&nbsp &nbsp<?php echo $row['created'];?></td>
+						</tr>
+						<tr>
+							<td>དབྱེ་ཁག།:&nbsp &nbsp<?php echo $this->catObj->getColumn($row['category'],'category')?></td>
+							<td>དབྱེ་ཁག་གི་ནང་གསེས།:&nbsp &nbsp<?php echo $this->subcatObj->getSubcat('sub_category',array('subcat_id'=>$row['subcategory'],'group'=>8))?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-body">
+				<table class="table table-sm table-bordered card-table text-wrap" id="dataTables">
+					<tbody>
+						<tr>
+							<td>རྫོང་ཁག།:&nbsp &nbsp<?php echo $row['DzongkhagNameDz'];?></td>
+							<td>ལྷ་ཁང་གི་མིང།:&nbsp &nbsp<?php echo $row['LhakhangNameDz'];?></td>
+							<td>ནང་གསེས།:&nbsp &nbsp<?php echo $row['LhaSectionNameDz'];?></td>
+						</tr>
+						<tr>
+							<td>རྒེད་འོག།:&nbsp &nbsp<?php echo $row['GewogNameDz'];?></td>
+							<td>བཞེངས་མི།:&nbsp &nbsp<?php echo $row['LhaBuilderDz'];?></td>
+							<td>བདག་དབང།:&nbsp &nbsp<?php echo $row['LhaOwnerNameDz'];?></td>
+						</tr>
+						<tr>
+							<td>གཡུས།:&nbsp &nbsp<?php echo $row['VillageDz'];?></td>
+							<td>དུས་རབས།:&nbsp &nbsp<?php echo $row['LhaCenturyDz'];?></td>
+							<td>དགུང་ཨང།:&nbsp &nbsp<?php echo $row['LhaIdentificationNumber'];?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-body">
+				<table class="table table-sm table-bordered card-table text-wrap" id="dataTables">
+					<tbody>
+						<tr>
+							<td>དངཽས་པོའྀ་མྀང།:&nbsp &nbsp<?php echo $row['TenDescriptionDz'];?></td>
+							<td>སྤྲོས།:&nbsp &nbsp<?php echo $row['TenDesign'];?></td>
+						</tr>
+						<tr>
+							<td>བཟོ་བསྐྲུན།:&nbsp &nbsp<?php echo $row['TenSideMatDz'];?></td>
+							<td>གཡུ་བྱུ་རུ།:&nbsp &nbsp<?php echo $row['TenJwellWornDz'];?></td>
+						</tr>
+						<tr>
+							<td>གསེར་སྦྲོན།:&nbsp &nbsp<?php echo $row['TenGoldScriptDz'];?></td>
+							<td>ཚད།:&nbsp &nbsp<?php echo $row['TenSizeDz'];?></td>
+						</tr>
+						<tr>
+							<td>ལྗིད་ཚད།:&nbsp &nbsp<?php echo $row['TenWeightDz'];?></td>
+							<td>ཕུལ་མི།:&nbsp &nbsp<?php echo $row['TenPresentedByDz'];?></td>
+						</tr>
+						<tr>
+							<td>ཉམས་སྐྱོན།:&nbsp &nbsp<?php echo $row['TenConditionDz'];?></td>
+							<td>ལོ་རྒྱུས།:&nbsp &nbsp<?php echo $row['TenStoryDz'];?></td>
+						</tr>
+						<tr>
+							<td>རྒྱུ།:&nbsp &nbsp<?php echo $row['TenMaterialDz'];?></td>
+							<td>རིས་མོ།:&nbsp &nbsp<?php echo $row['TenPatternDz'];?></td>
+						</tr>
+						<tr>
+							<td>ཁ་དོག།:&nbsp &nbsp<?php echo $row['TenColorDz'];?></td>
+							<td>འགོར་ཚ།:&nbsp &nbsp<?php echo $row['TenCircumferenceDz'];?></td>
+						</tr>
+						<tr>
+							<td>བཟཽ་མྀ།:&nbsp &nbsp<?php echo $row['TenSculpturDz'];?></td>
+							<td>གྲངས་ཁ།:&nbsp &nbsp<?php echo $row['TenQtyDz'];?></td>
+						</tr>
+						<tr>
+							<td>ངོས་འཛིན།:&nbsp &nbsp<?php echo $row['TenIdentificationDz'];?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-body">
+				<table class="table table-sm  card-table text-wrap" id="dataTables">
+					<thead>
+						<tr>
+							<td>དཀོན་གཉེར་གྱི་མིང་རྟགས།:&nbsp &nbsp</td>
+							<td>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།:&nbsp &nbsp</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><?php echo $row['TenCaretakerDz'];?></td>
+							<td><?php echo $row['TenCheckedByDz'];?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#print').gentcpdf({
+		content: '#print-content',
+		src:"<?php echo $this->url('print', array('action' => 'index'));?>",
+		orentation:"P",
+		size: 'A4',
+	});  
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: falses
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		
+	});
+});
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+}
+</script>

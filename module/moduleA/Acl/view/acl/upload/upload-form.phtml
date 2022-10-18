@@ -1,0 +1,64 @@
+<?php
+/**
+ * View -- of Acl/UploadController/uploadFormAction
+ * chophel@athang.com
+ */
+ $this->headTitle($this->title);
+?>
+<form name="upload-form" id="upload-form" action="<?php echo $this->url('upload',array('action'=>'upload-form')); ?>" method="post" enctype="multipart/form-data">
+	<div class="modal-header">
+        <h4 class="modal-title"> <i class="icon ti ti-paperclip"></i><?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body"> 
+		<div class="alert alert-info"> 
+			<strong>*Note :</strong> <i class="red"> File size of 2MB is accepted. Compress your files if size is above <strong>2MB</strong>. We recommend you to upload your files in <strong>PDF</strong> format.</i>
+			<br/>
+			<p><strong>Allowed File Types :</strong> jpg, jpeg, png, gif, pdf, docx, xlsx and tif</p>
+		</div>
+		<input type="hidden" value="<?php echo $this->application_id; ?>" name="application">
+		<div class="mb-3">
+			<label for="filename" class="form-label">Enter File Name:</label>
+			<input type="text" class="form-control" id="filename" name="filename" placeholder="Enter File Name" required />
+		</div>
+		<div class="mb-3">
+			<label for="uploadfile" class="form-label"> Select File:</label>
+			<input type="file" class="form-control" name="uploadfile" id="uploadfile" required/>
+		</div>
+    </div> <!-- /modal-body -->
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="icon ti ti-paperclip"></i>Upload</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>  
+</form>
+<script type="text/javascript">	   
+$(function(){
+	FormValidation.formValidation(document.getElementById('upload-form'), {
+		fields: {
+			filename: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide file name.'
+					},
+				}
+			},
+			uploadfile: {
+				validators: {
+					notEmpty: {
+						message: 'Please select file.'
+					},
+				}
+			},
+		},
+		plugins: {
+			trigger: new FormValidation.plugins.Trigger(),
+			bootstrap5: new FormValidation.plugins.Bootstrap5({
+				rowSelector: '.mb-3',
+			}),
+			submitButton: new FormValidation.plugins.SubmitButton(),
+			defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+		},
+	});
+});
+</script>
+

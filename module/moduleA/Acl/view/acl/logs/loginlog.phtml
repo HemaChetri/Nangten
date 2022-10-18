@@ -1,0 +1,142 @@
+<?php 
+/**
+ * View -- of Acl/LogsController/loginlogAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(50,51)); ?>
+					<div class="card-header">
+						<div class="col-6">
+							<form method="POST">
+								<div class="form-group mb-3 row">
+									<label class="form-label col-4 col-form-label">User</label>
+									<div class="col">
+										<select id="user" name="user" class="form-select" data-placeholder="Select">
+											<?php foreach($this->userObj->getAll(array('location_permit'=>'-1','status_permit'=>'-1','onlyifcreator_permit'=>'-1')) as $user):?>
+											<?php $selected = ($user['id']==$this->resource)?'selected':'';?>
+												<option value="<?php echo $user['id']?>"<?php echo $selected;?>><?php echo $user['name']." (".$user['email'].")";?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>User</th>
+									<th>IP Address</th>
+									<th>Login Timestamp</th>
+									<th>Logout Timestamp</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php echo $i++;?></td>
+									<td><?php echo $this->userObj->getColumn($row['author'],'name'); ?>
+										<?php if ( $row['modified'] == '0000-00-00 00:00:00' || $row['modified'] == null ): ?>
+											<?php
+												$status = ( strpos($row['created'], date('Y-m-d')) === false ) ? 'info' : 'success';
+												$title = ( strpos($row['created'], date('Y-m-d')) === false ) ? 'offline' : 'online';
+											?>
+										<span class="badge bg-<?php echo $status;?>"><?php echo $title?></span>
+										<?php endif; ?>
+									</td>				   
+									<td><?php echo $row['ip_address']; ?></td>
+									<td><?php echo $row['created']; ?></td>	
+									<td><?php echo $row['modified']; ?></td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','search_pagination.phtml', 
+							array('route' => 'logs/paginator','action'=>'loginlog','id'=>$this->resource,'role'=>'0','task'=>'0'));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#user').change(function(){
+		window.location.href="<?php echo $this->url('logs',array('action'=>'loginlog'));?>/"+$(this).val();
+	});
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

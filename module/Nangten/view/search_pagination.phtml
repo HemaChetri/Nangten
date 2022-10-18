@@ -1,0 +1,122 @@
+<?php
+	/**
+	 * chophel@athang.com
+	 * Pagination
+	 */
+?>
+<?php if ($this->pageCount): ?>
+	<p class="m-0 text-muted">Showing <span><?php echo $this->firstItemNumber; ?></span> to <span><?php echo $this->lastItemNumber; ?></span> of <span><?php echo $this->totalItemCount;?></span> entries</p>
+		
+	<ul class="pagination m-0 ms-auto">
+		<!-- Previous page link -->
+		<?php if (isset($this->previous)): ?>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action, 'page' => $this->previous,'id'=>$this->id)); ?>">
+					<i class="icon ti ti-chevron-left"></i>prev</a>
+			</li>
+		<?php else: ?>
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+					<i class="icon ti ti-chevron-left"></i>prev</a>
+			</li>
+		<?php endif; ?>
+		<!-- Numbered page links -->
+		<?php 
+			if($this->current < 5):
+				foreach ($this->pagesInRange as $page):
+					if($page <=5):
+						if ($page != $this->current): ?>
+							<li class="page-item">
+								<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $page,'id'=>$this->id)); ?>">
+									<?php echo $page; ?></a>
+							</li>
+				<?php 	else: ?>
+							<li class="page-item active">
+								<a class="page-link" href="#"><?php echo $page; ?></a>
+							</li>
+				<?php 	endif; 
+					endif;
+				endforeach;
+				if($this->pageCount > 5):
+				?>
+				<?php if($this->first+5 != $this->last):?>
+				<li class="page-item disabled">
+					<a class="page-link" href="#"  tabindex="-1" aria-disabled="true">…</a></li>
+				<?php endif;?>
+				<li class="page-item">
+					<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->last,'id'=>$this->id)); ?>">
+						<?php echo $this->last;?></a>
+				</li>
+		<?php 	endif;
+			elseif($this->current > $this->last-4):
+			?>
+				<li class="page-item">
+					<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->first,'id'=>$this->id)); ?>">
+						<?php echo $this->first; ?></a>
+				</li>
+				<?php if($this->last-5 != $this->first):?>
+					<li class="page-item disabled">
+						<a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+							…</a>
+					</li>
+				<?php endif;?>
+				<?php 
+				foreach ($this->pagesInRange as $page):
+					if($page > $this->last-5):
+						if ($page != $this->current): ?>
+							<li class="page-item">
+								<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $page,'id'=>$this->id)); ?>">
+									<?php echo $page; ?></a>
+							</li>
+				<?php 	else: ?>
+							<li class="page-item active">
+								<a class="page-link" href="#">
+									<?php echo $page; ?></a>
+							</li>
+				<?php 	endif; 
+					endif;
+				endforeach;
+			else:?>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->first,'id'=>$this->id)); ?>">
+					<?php echo $this->first; ?></a>
+			</li>
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+					…</a>
+			</li>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->current-1,'id'=>$this->id)); ?>">
+					<?php echo $this->current-1; ?></a>
+			</li>
+			<li class="page-item active">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->current,'id'=>$this->id)); ?>">
+					<?php echo $this->current; ?></a>
+			</li>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->current+1,'id'=>$this->id)); ?>">
+					<?php echo $this->current+1; ?></a>
+			</li>
+			<li class="page-item disabled">
+				<a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+					…</a>
+			</li>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->last,'id'=>$this->id)); ?>">
+					<?php echo $this->last; ?></a>
+			</li>
+			<?php endif;?>
+		<!-- Next page link -->
+		<?php if (isset($this->next)): ?>
+			<li class="page-item">
+				<a class="page-link" href="<?php echo $this->url($this->route, array('action'=>$this->action,'page' => $this->next,'id'=>$this->id)); ?>">
+					<i class="icon ti ti-chevron-right"></i>next</a>
+			</li>
+		<?php else: ?>
+			<li class="page-item disabled">
+				<a class="page-link" tabindex="-1" aria-disabled="true">
+					<i class="icon ti ti-chevron-right"></i>next</a>
+			</li>
+		<?php endif; ?>
+	</ul>
+<?php endif; ?>

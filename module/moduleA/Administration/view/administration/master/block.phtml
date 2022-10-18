@@ -1,0 +1,148 @@
+<?php
+/**
+ * View -- of Administration/MasterController/block
+ * chophel@athang.com
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(117,120,123,126)); ?>
+					<div class="card-header">
+						<div class="col-9">
+							<form method="POST">
+								<div class="row">
+									<div class="form-group mb-3 col-lg-6">
+										<label for="district" class="form-label">Dzongkhag</label>
+										<select id="district" name="district" class="form-select" data-placeholder="Select">
+											<option value="-1" <?php echo ($district_id == '-1')?'selected':'';?>>All</option>
+											<?php foreach($this->districtObj->get(array('status'=>'1')) as $district):?>
+												<option value="<?php echo $district['id']?>"<?php echo ($district['id']==$district_id)?'selected':'';?>>
+													<?php echo $district['DzongkhagNameEn'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+								<?php echo $this->button(2,$page);?>
+							</div>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>En Name</th>
+									<th>Dz Name</th>
+									<th>Code</th>
+									<th>Dzongkhag</th>
+									<th>Status</th>
+									<?php if($this->button(1)!=""):?>
+										<th class="no-sort no-printpdf">Action</th>
+									<?php endif;?>	
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td class="fw-bold"><?php echo $row['GewogNameEn']; ?></td>
+									<td class="fs-2"><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['GewogCode']; ?></td>
+									<td><?php echo $this->districtObj->getColumn($row['DzongkhagId'],'DzongkhagNameEn');?></td>
+									<td><?php echo $this->status($row['status']); ?></td>
+									<?php if($this->button(1)!=""):?>
+										<td><?php echo $this->button(1, $row['id'].'_'.$page);?></td>
+									<?php endif;?>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','adm_pagination.phtml', 
+							array('route' => 'setmaster/paginator','action'=>'block','id'=>$this->district_id));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#district').change(function(){
+		window.location.href="<?php echo $this->url('setmaster',array('action'=>'block'));?>/"+$(this).val();
+	});
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

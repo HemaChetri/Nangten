@@ -1,0 +1,134 @@
+<?php 
+/**
+ * View -- of Administration/UserController/usersAction
+ * chophel@athang.com -- 2022
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(102)); ?>
+					<div class="card-header">
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+								<?php echo $this->button(2);?>
+							</div>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th >#</th>
+									<th>Name</th>
+									<th>CID</th>
+									<th>Email</th>
+									<th>Mobile</th>
+									<th>Location</th>
+									<th>Status</th>
+									<?php if($this->button(1)!=""):?>
+										<th class="no-print">Action</th>
+									<?php endif; ?>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=1+(($page-1)*25); foreach ($paginator as $row):?>
+								<tr data-href="<?php echo $this->button(4,$row['id']); ?>">
+									<td><?php echo $i++; ?> </td>
+									<td><?php echo $row['name']; ?></td>
+									<td><?php echo $row['cid']; ?></td>
+									<td><?php echo $row['email']; ?></td>
+									<td><?php echo $row['mobile']; ?></td>
+									<td><?php echo $this->locationObj->getColumn($row['location'],'location'); ?></td>
+									<td><?php echo $this->status($row['status']); ?></td>
+									<?php if($this->button(1)!=""):?>
+										<td><?php echo $this->button(1,$row['id']);?></td>
+									<?php endif;?>
+								</tr>
+							<?php endforeach;?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','adm_pagination.phtml', 
+							array('route' => 'user/paginator','action'=>'users','id'=>'0'));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('document').ready(function(){
+	$("tr[data-href]").each(function(){ 
+		if($(this).attr('data-href')!='#'){
+			$(this).css('cursor','pointer');
+			$(this).bind('click',function() {
+				window.document.location = $(this).attr("data-href");
+			});
+		}
+	});
+	
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});	
+</script>

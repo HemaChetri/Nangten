@@ -1,0 +1,70 @@
+
+<div class="empty" style="text-align: left;">
+    <div class="empty-header">500</div>
+    <p class="empty-title"><?= $this->message ?></p>
+    <p class="empty-subtitle text-muted">
+        <?php if (! empty($this->display_exceptions)) : ?>
+            <?php if (isset($this->exception) && $this->exception instanceof \Throwable) : ?>
+        
+        <h2>Additional information:</h2>
+        <h3><?= get_class($this->exception) ?></h3>
+        <dl>
+            <dt>File:</dt>
+            <dd>
+                <pre><?= $this->exception->getFile() ?>:<?= $this->exception->getLine() ?></pre>
+            </dd>
+            <dt>Message:</dt>
+            <dd>
+                <pre><?= $this->escapeHtml($this->exception->getMessage()) ?></pre>
+            </dd>
+            <dt>Stack trace:</dt>
+            <dd>
+                <pre><?= $this->escapeHtml($this->exception->getTraceAsString()) ?></pre>
+            </dd>
+        </dl>
+
+                <?php if ($ex = $this->exception->getPrevious()) : ?>
+        <hr/>
+
+        <h2>Previous exceptions:</h2>
+        <ul class="list-unstyled">
+                    <?php $icount = 0 ?>
+                    <?php while ($ex) : ?>
+            <li>
+                <h3><?= get_class($ex) ?></h3>
+                <dl>
+                    <dt>File:</dt>
+                    <dd>
+                        <pre><?= $ex->getFile() ?>:<?= $ex->getLine() ?></pre>
+                    </dd>
+                    <dt>Message:</dt>
+                    <dd>
+                        <pre><?= $this->escapeHtml($ex->getMessage()) ?></pre>
+                    </dd>
+                    <dt>Stack trace:</dt>
+                    <dd>
+                        <pre><?= $this->escapeHtml($ex->getTraceAsString()) ?></pre>
+                    </dd>
+                </dl>
+            </li>
+                        <?php
+                        $ex = $ex->getPrevious();
+                        if (++$icount >= 50) {
+                            echo '<li>There may be more exceptions, but we do not have enough memory to process it.</li>';
+                            break;
+                        }
+                        ?>
+                    <?php endwhile ?>
+        </ul>
+                <?php endif ?>
+            <?php else : ?>
+                <h3>No Exception available</h3>
+            <?php endif ?>
+        <?php endif ?>
+    </p>
+    <div class="empty-action" style="margin-top: 0rem;">
+        <a href="<?php echo $this->url('home'); ?>" class="btn btn-primary">
+            <i class="icon ti ti-arrow-left"></i>Take me home
+        </a>
+    </div>
+</div>

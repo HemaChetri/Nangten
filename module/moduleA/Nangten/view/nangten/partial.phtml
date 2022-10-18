@@ -1,0 +1,48 @@
+<?php /*** partial ***/
+      $ritual  = ($this->active == "ritual")?"active":"";                           
+      $statue  = ($this->active == "statue")?"active":""; 
+	  $stupa  = ($this->active == "stupa")?"active":"";                                    
+      $pecha  = ($this->active == "pecha")?"active":"";
+	  $thanka  = ($this->active == "thanka")?"active":"";                                                     
+      $debri  = ($this->active == "debri")?"active":""; 
+	   
+?>
+<ul class="nav nav-tabs">
+<li class="nav-item">
+	<a class="nav-link<?php echo $statue; ?>" aria-current="page" href="<?php echo $this->url('statue', array('action' => 'statue')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Buddha.svg';?>">
+		<strong>སྐུ་རྟེན།</strong>
+	</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link<?php echo $thanka; ?>" aria-current="page" href="<?php echo $this->url('thanka', array('action' => 'thanka')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Thangka.svg';?>">
+		<strong>ཐང་ཀ།</strong>
+	</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link<?php echo $pecha; ?>" aria-current="page" href="<?php echo $this->url('pecha', array('action' => 'pecha')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Text.svg';?>">
+		<strong>གསུང་རྟེན།</strong>
+	</a>
+  </li>
+  <li class="nav-item">
+	<a class="nav-link<?php echo $ritual; ?>" aria-current="page" href="<?php echo $this->url('ritual', array('action' => 'ritual')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Dorjee.svg';?>">
+		<strong>མཆོད་ཆས།</strong>
+	</a>
+  </li>
+ <li class="nav-item">
+	<a class="nav-link<?php echo $stupa; ?>" aria-current="page" href="<?php echo $this->url('stupa', array('action' => 'stupa')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Stupa.svg';?>">
+		<strong>མཆོད་རྟེན།</strong>
+	</a>
+ </li>
+ <li class="nav-item">
+	<a class="nav-link<?php echo $debri; ?>" aria-current="page" href="<?php echo $this->url('debri', array('action' => 'debri')); ?>">
+		<img src="<?php echo $this->basePath() .'/icons/Wall_paint.svg';?>">
+		<strong>ལྡེབ་རིས།</strong>
+	</a>
+  </li>
+</ul>
+				

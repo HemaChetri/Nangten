@@ -1,0 +1,75 @@
+{
+    "name": "laminas/laminas-paginator",
+    "description": "Paginate collections of data from arbitrary sources",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "paginator"
+    ],
+    "homepage": "https://laminas.dev",
+    "support": {
+        "docs": "https://docs.laminas.dev/laminas-paginator/",
+        "issues": "https://github.com/laminas/laminas-paginator/issues",
+        "source": "https://github.com/laminas/laminas-paginator",
+        "rss": "https://github.com/laminas/laminas-paginator/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laminas": {
+            "component": "Laminas\\Paginator",
+            "config-provider": "Laminas\\Paginator\\ConfigProvider"
+        }
+    },
+    "require": {
+        "php": "^7.3 || ~8.0.0",
+        "ext-json": "*",
+        "laminas/laminas-stdlib": "^3.2.1",
+        "laminas/laminas-zendframework-bridge": "^1.0.4"
+    },
+    "require-dev": {
+        "laminas/laminas-cache": "^2.9.0",
+        "laminas/laminas-coding-standard": "~2.1.4",
+        "laminas/laminas-config": "^2.6.0",
+        "laminas/laminas-filter": "^2.9.4",
+        "laminas/laminas-servicemanager": "^3.4.1",
+        "laminas/laminas-view": "^2.11.4",
+        "phpunit/phpunit": "^9.3",
+        "psalm/plugin-phpunit": "^0.15.1",
+        "vimeo/psalm": "^4.6"
+    },
+    "suggest": {
+        "laminas/laminas-cache": "Laminas\\Cache component to support cache features",
+        "laminas/laminas-filter": "Laminas\\Filter component",
+        "laminas/laminas-paginator-adapter-laminasdb": "Provides pagination adapters for Select statements and TableGateway instances",
+        "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
+        "laminas/laminas-view": "Laminas\\View component"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\Paginator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\Paginator\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "static-analysis": "psalm --shepherd --stats",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "replace": {
+        "zendframework/zend-paginator": "^2.8.2"
+    }
+}

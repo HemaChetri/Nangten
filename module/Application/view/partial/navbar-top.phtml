@@ -1,0 +1,100 @@
+<?php
+/**
+ * Layout --- Top Navbar
+ * chophel@athang.com
+ */
+?>
+<?php if($this->identity()): $user = $this->identity(); endif; ?>
+<header class="navbar navbar-expand-md navbar-light d-print-none">
+	<div class="container-xl">
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+            <a href="<?php echo $this->url('home'); ?>">
+			<h1>ཅ་རྙིང་འཛིན་སྐྱོང་སྡེ་ཚན།</h1>
+              	<!--img src="<?php //echo $this->basePath() . '/images/nav_logo.png';?>" width="" height="" alt="Nangten" class="navbar-brand-image"-->
+            </a>
+		</h1>
+		<div class="navbar-nav flex-row order-md-last">
+			<div class="nav-item d-none d-md-flex me-3">
+				<div class="btn-list">
+					<?php if(in_array($user->role,array(99,100))):?>
+					<a href="<?php echo $this->url('ngreport',array('action'=>'nangtenreport'));?>" class="btn" target="_blank" rel="noreferrer">
+						<i class="ti ti-building-pavilon icon text-primary"></i>ནང་རྟེན་སྙན་ཞུ།</a>
+					<?php endif;?>
+				</div>
+			</div>
+			<div class="d-none d-md-flex">
+				<div class="nav-item dropdown d-none d-md-flex me-3">
+					<a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+						<i class="ti ti-bell icon"></i><span class="badge bg-red"></span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+						<div class="card">
+							<?php $notificationResult = $this->notification($user->id);
+							foreach($notificationResult as $notifycount);?>
+							<div class="card-header"><h3 class="card-title"><?php echo (sizeof($notificationResult)>0)?$notifycount['count']:'';?> Notifications</h3></div>
+							<div class="list-group list-group-flush list-group-hoverable">
+								<?php if(sizeof($notificationResult)>0): foreach($notificationResult as $notify): ?>
+								<div class="list-group-item">
+									<a href="<?php echo $this->url($notify['route'], array('action'=>$notify['action'], 'id'=>$notify['key'].'_'.$notify['id']));?>" class="text-body d-block" style="text-decoration:none;">
+										<div class="row align-items-center">
+											<div class="col-auto"><span class="status-dot status-dot-animated <?php echo ($notify['priority']==1)?'bg-red':'bg-green';?> d-block"></span></div>
+											<div class="col text-truncate">
+												<?php echo $notify['desc']; ?>
+												<div class="d-block text-muted text-truncate mt-n1">
+													<i class="icon ti ti-calendar"></i>
+													<?php echo date('jS M, Y', strtotime($notify['created'])); ?>
+													<?php echo date('g:i A', strtotime($notify['created'])); ?>
+												</div>
+											</div>
+											<div class="col-auto">
+												<i class="ti ti-star icon <?php echo ($notify['priority']==1)?'text-yellow':'text-muted';?>"></i>
+											</div>
+										</div>
+									</a>
+								</div>
+								<?php endforeach;?>
+								<div class="list-group-item">
+									<a href="<?php echo $this->url('user', array('action'=>'notification', 'id'=>$user->id));?>" class="text-body d-block" style="text-decoration:none;">
+										<div class="row align-items-center">
+											<div class="col text-truncate text-center">
+												See all notifications
+											</div>
+										</div>
+									</a>
+								</div>
+								<?php else:?>
+								<div class="list-group-item">
+									<div class="row align-items-center">
+										<div class="col text-truncate">
+											<i class="ti ti-bell-off icon"></i>
+											No New Notifications.
+										</div>
+									</div>
+								</div>
+								<?php endif;?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="nav-item dropdown">
+				<a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+					<span class="avatar avatar-sm" style="background-image: url(<?php echo $this->basePath() . '/images/avatar.jpg';?>)"></span>
+					<div class="d-none d-xl-block ps-2">
+						<div><?php echo $user->name;?></div>
+						<div class="mt-1 small text-muted"><?php echo $user->mobile;?></div>
+					</div>
+				</a>
+				<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+					<a href="<?php echo $this->url('user', array('action'=>'view', 'id'=>$user->id));?>" class="dropdown-item">User Account</a>
+					<a href="<?php echo $this->url('application',array('action'=>'documentation'));?>" class="dropdown-item">Documentation</a>
+					<div class="dropdown-divider"></div>
+					<a href="<?php echo $this->url('auth', array('action' => 'logout')); ?>" class="dropdown-item">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>

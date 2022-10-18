@@ -1,0 +1,375 @@
+<?php 
+/**
+ * View -- of Nangten/RitualController/editritualAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach($ritual as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title"><i class="icon ti ti-user-plus"></i><?php echo $this->title;?></h3>
+					</div>
+					<form id="#form" method="post" action="<?php echo $this->url('ritual', array('action' => 'editritual','id'=>$row['id'])); ?>" enctype="multipart/form-data" >
+						<div class="card-body">
+						<h4><strong><i>Categorization</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<input type="hidden" name="ritual_id" value="<?php echo $row['id'];?>">
+								<div class="form-group mb-3 col-lg-6">
+									<label for="category" class="form-label">Category</label>
+									<div class="input-group mb-2">
+										<select id="category" name="category" class="form-select" data-placeholder="Select">
+											<?php foreach($category as $categorys):?>
+												<option value="<?php echo $categorys['id']?>" <?php echo ($row['category']==$categorys['id'])?'selected':'';?>> 
+													<?php echo $categorys['category'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+								<input type="hidden" name="statue_id" value="<?php echo $statues['id'];?>" >
+								<div class="form-group mb-3 col-lg-6">
+									<label for="subcategory" class="form-label">Sub Category</label>
+									<div class="input-group mb-2">
+										<select id="subcategory" name="subcategory" class="form-select" data-placeholder="Select">
+											<?php foreach($subcategory as $subcategorys):?>
+												<option value="<?php echo $subcategorys['id']?>" <?php echo ($row['subcategory']==$subcategorys['id'])?'selected':'';?>> 
+													<?php echo $subcategorys['sub_category'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<h4><strong><i>Lhakhang details</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="DzongkhagId" class="form-label">རྫོང་ཁག་</label>
+									<div class="input-group mb-2">
+										<select id="DzongkhagId" name="DzongkhagId" class="form-select" data-placeholder="Select">
+											<?php foreach($dzongkhag as $dzongkhags):?>
+												<option value="<?php echo $dzongkhags['id']?>" <?php echo ($row['DzongkhagId']==$dzongkhags['id'])?'selected':'';?>> 
+													<?php echo $dzongkhags['DzongkhagNameDz'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="dob" class="form-label">རྒེད་འོག་:</label>
+										<select id="GewogId" name="GewogId" class="form-select" data-placeholder="Select">
+											<?php foreach($gewog as $gewogs):?>
+												<option value="<?php echo $gewogs['id']?>" <?php echo ($row['GewogId']==$gewogs['id'])?'selected':'';?>> 
+													<?php echo $gewogs['GewogNameDz'];?></option>
+											<?php endforeach;?>
+										</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="name" class="form-label">གཡུས་</label>
+									<select id="VillageId" name="VillageId" class="form-select" data-placeholder="Select">
+										<?php foreach($village as $villages):?>
+											<option value="<?php echo $villages['id']?>" <?php echo ($row['VillageId']==$villages['id'])?'selected':'';?>> 
+												<?php echo $villages['VillageNameDz'];?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhakhangId" class="form-label">ལྷ་ཁང་གི་མིང་</label>
+									<select id="LhakhangId" name="LhakhangId" class="form-select" data-placeholder="Select">
+										<?php foreach($lhakhang as $lhakhangs):?>
+											<option value="<?php echo $lhakhangs['id']?>" <?php echo ($row['LhakhangId']==$lhakhangs['id'])?'selected':'';?>> 
+												<?php echo $lhakhangs['LhakhangNameDz'];?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="mobile" class="form-label">ནང་གསེས་</label>
+									<select id="LhaSectionId" name="LhaSectionId" class="form-select" data-placeholder="Select">
+										<?php foreach($section as $sections):?>
+											<option value="<?php echo $sections['id']?>" <?php echo ($row['LhakhangId']==$sections['id'])?'selected':'';?>> 
+												<?php echo $sections['SectionNameDz'];?></option>
+										<?php endforeach;?>
+									</select>
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaBuilderDz" class="form-label">བཞེངས་མི</label>
+									<input type="text" class="form-control" placeholder="Builder" name="LhaBuilderDz" value="<?php echo $row['LhaBuilderDz'];?>" autocomplete="off" required >	
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaCenturyDz" class="form-label">དུས་རབས</label>
+									<input type="text" class="form-control" placeholder="Century" name="LhaCenturyDz" value="<?php echo $row['LhaCenturyDz'];?>" autocomplete="off" required >	
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaOwnerNameDz" class="form-label">དབྱེ་བ་གཞན་</label>
+									<input type="text" class="form-control" placeholder="Owner name" name="LhaOwnerNameDz" value="<?php echo $row['LhaOwnerNameDz'];?>" autocomplete="off" required >	
+								</div>		
+							</div>
+							<h4><strong><i>Nangten Details</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+							    <div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="role">མཚན་གསལ</label>
+									<input type="text" class="form-control" placeholder="TenDescriptionDz" name="TenDescriptionDz" value="<?php echo $row['TenDescriptionDz'];?>" autocomplete="off" required >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenMakeId">རྒྱུ་</label>
+									<select id="TenMakeId" name="TenMakeId" class="form-select" data-placeholder="Select">
+									<?php foreach($material as $materials):?>
+										<option value="<?php echo $materials['id']?>" <?php echo ($row['TenMakeId']==$materials['id'])?'selected':'';?>> 
+											<?php echo $materials['MaterialNameDz'];?></option>
+									<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenDesign">སྤྲོས་</label>
+									<input type="text" class="form-control" placeholder="Design" name="TenDesign" value="<?php echo $row['TenDesign'];?>" autocomplete="off" required >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenPatternDz">རིས་མོ་</label>
+									<input type="text" class="form-control" placeholder="Ten Pattern" name="TenPatternDz" value="<?php echo $row['TenPatternDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenMadePlaceDz" class="form-label">བཟོ་བསྐྲུན་</label>
+									<input type="text" class="form-control" placeholder="Ten Made Place" name=" TenMadePlaceDz" value="<?php echo $row['TenMadePlaceDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenColorDz">ཁ་དོག་</label>
+									<input type="text" class="form-control" placeholder="Ten Color" name="TenColorDz" value="<?php echo $row['TenColorDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenJwellWornDz" class="form-label">གཡུ་བྱུ་རུ་</label>
+									<input type="text" class="form-control" placeholder="Ten Jwell Worn" name="TenJwellWornDz" value="<?php echo $row['TenJwellWornDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCircumferenceDz">འགོར་ཚད་</label>
+									<input type="text" class="form-control" placeholder="Circumference" name="TenCircumferenceDz" value="<?php echo $row['TenCircumferenceDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenGoldScriptDz">གསེར་སྦྲོན</label>
+									<input type="text" class="form-control" placeholder="GoldScript" name="TenGoldScriptDz" value="<?php echo $row['TenGoldScriptDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenSculpturDz" class="form-label">བཟོ་མི་</label>
+									<input type="text" class="form-control" placeholder="Sculpture" name="TenSculpturDz" value="<?php echo $row['TenSculpturDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenSizeDz">ཚད་</label>
+									<input type="text" class="form-control" placeholder="Size" name="TenSizeDz" value="<?php echo $row['TenSizeDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenQtyDz" class="form-label">གྲངས་ཁ་</label>
+									<input type="text" class="form-control" placeholder="Quantity" name="TenQtyDz" value="<?php echo $row['TenQtyDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenWeightDz" class="form-label">ལྗིད་ཚད་</label>
+									<input type="text" class="form-control" placeholder="Weight" name="TenWeightDz" value="<?php echo $row['TenWeightDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCostDz">གོང་ཚད་</label>
+									<input type="text" class="form-control" placeholder="Cost" name="TenCostDz" value="<?php echo $row['TenCostDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenPresentedByDz">ཕུལ་མི་</label>
+									<input type="text" class="form-control" placeholder="Source" name="TenPresentedByDz" value="<?php echo $row['TenPresentedByDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenOtherRemarksDz">ཁ་གསལ་གཞན་</label>
+									<input type="text" class="form-control" placeholder="Other Remarks" name="TenOtherRemarksDz" value="<?php echo $row['TenOtherRemarksDz'];?>" autocomplete="off"  >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenConditionDz">ཉམས་སྐྱོན་</label>
+									<input type="text" class="form-control" placeholder="Condition" name="TenConditionDz" value="<?php echo $row['TenConditionDz'];?>" autocomplete="off"  >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenIdentificationDz">ངོས་འཛིན་</label>
+									<input type="text" class="form-control" placeholder="Identification" name="TenIdentificationDz" value="<?php echo $row['TenIdentificationDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenStoryDz">ལོ་རྒྱུས་</label>
+									<input type="text" class="form-control" placeholder="Story" name="TenStoryDz" value="<?php echo $row['TenStoryDz'];?>" autocomplete="off" >
+								</div>
+							</div>
+							<h4><strong><i>Other details</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCaretakerDz">དཀོན་གཉེར་གྱི་མིང་རྟགས།</label>
+									<input type="text" class="form-control" placeholder="TenCaretakerDz" name="TenCaretakerDz" value="<?php echo $row['TenCaretakerDz'];?>" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCheckedByDz">ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</label>
+									<input type="text" class="form-control" placeholder="TenCheckedByDz" name="TenCheckedByDz" value="<?php echo $row['TenCheckedByDz'];?>" autocomplete="off" >
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<button type="submit" class="btn btn-success"><span class="icon ti ti-check"></span> Save</button>
+							<a class="btn btn-warning" onclick="javascript:history.back();"><span class="icon ti ti-x"></span> Cancel </a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('select#category').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getsubcategory")); ?>",
+            {
+                categoryId: $(this).val(),
+            },
+            function(data){
+                $("select#subcategory").html(data.subcategoryValue);
+                $('select#subcategory').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#DzongkhagId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getgewog")); ?>",
+            {
+                dzongkhagId: $(this).val(),
+            },
+            function(data){
+                $("select#GewogId").html(data.gewogValue);
+                $('select#GewogId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getvillage")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#VillageId").html(data.villageValue);
+                $('select#VillageId').trigger('chosen:updated');
+				$("select#LhakhangId").html(data.lhakhangValue);
+                $('select#LhakhangId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#LhakhangId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getsection")); ?>",
+            {
+                lhaId: $(this).val(),
+            },
+            function(data){
+                $("select#LhaSectionId").html(data.sectionValue);
+                $('select#LhaSectionId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+		const fv = FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				DzongkhagId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select dzongkhag.'
+						},
+					}
+				},
+				GewogId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select gewog.'
+						},
+					}
+				},
+				LhakhangId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select lhakhang.'
+						},
+					}
+				},
+				VillageId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select village'
+						},
+					}
+				},
+				LhaSectionId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select section.'
+						}
+					}
+				},
+				TenMakeId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select Msterial.'
+						}
+					}
+				},
+				TenCaretakerDz: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide care taker.'
+						}
+					}
+				},
+				TenCheckedByDz: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide Checker.'
+						}
+					}
+				},
+				TenMakeId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select Material.'
+						}
+					}
+				},
+				category: {
+					validators: {
+						notEmpty: {
+							message: 'Please select category.'
+						}
+					}
+				},
+				subcategory: {
+					validators: {
+						notEmpty: {
+							message: 'Please select Sub category.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		}).on('core.element.validated', function (e) {
+			if (e.valid) {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+			} else {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+			}
+		});
+		$('form select').chosen().change(function () {
+			fv.revalidateField($(this).attr('name'));
+		});
+	});
+</script>

@@ -1,0 +1,676 @@
+<?php 
+/**
+ * View -- of Report/NgreportController/nangtenreport
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="col-12">
+						<form id="#form" method="POST" action="<?php echo $this->url('ngreport', array('action' => 'nangtenreport','id'=>$page)); ?>"  enctype="multipart/form-data" >    
+								<div class="row">
+									<div class="form-group mb-3 col-lg-3">
+										<label for="dzongkhag" class="form-label">Dzongkhag</label>
+										<select class="form-control" id="dzongkhag" name="dzongkhag" data-placeholder="Select" ><?php
+											foreach($dzongkhag as $dzongkhags):
+												$selected = ($data['dzongkhag']==$dzongkhags['id'])?'selected':'';?>
+												<option value="<?php echo $dzongkhags['id']; ?>" <?php echo $selected?>>
+												<?php echo $dzongkhags['DzongkhagNameDz']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-3">
+										<label for="group" class="form-label">Group</label>
+										<select class="form-control" id="group" name="group" data-placeholder="Select"><?php
+											foreach($group as $groups):
+												$selected = ($data['group']==$groups['id'])?'selected':'';?>
+												<option value="<?php echo $groups['id']; ?>" <?php echo $selected?>>
+												<?php echo $groups['GroupNameDz']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-3">
+										<label for="category" class="form-label">Category</label>
+										<select class="form-control" id="category" name="category" data-placeholder="Select">
+											<option value="-1" <?php echo ($data['category'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($category as $categorys):
+												$selected = ($data['category']==$categorys['id'])?'selected':'';?>
+												<option value="<?php echo $categorys['id']; ?>" <?php echo $selected?>>
+												<?php echo $categorys['category']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-3">
+										<label for="subcategory" class="form-label">Sub Category</label>
+										<select class="form-control" id="subcategory" name="subcategory" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['subcategory'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($subcategory as $subcategorys):
+												$selected = ($data['subcategory']==$subcategorys['subcat_id'])?'selected':'';?>
+												<option value="<?php echo $subcategorys['subcat_id']; ?>" <?php echo $selected?>>
+												<?php echo $subcategorys['sub_category']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="mb-3 mt-2 col-lg-3"></br>
+										<button type="submit" class="btn btn-square btn-success"><i class="icon ti ti-search"></i>Generate</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable fs-2" id="dataTables">
+					<?php switch ($data['group']){
+						case "2":?>
+							<thead>
+								<tr >
+									<th>#</th>
+									<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+									<th class="fs-2"><strong>གཡུས།</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+									<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+									<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+									<th class="fs-2"><strong>དུས་རབས།</strong></th>
+									<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+									<th class="fs-2"><strong>མཚན་གསལ།</strong></th>
+									<th class="fs-2"><strong>རྒྱུ།</strong></th>
+									<th class="fs-2"><strong>སྤྲོས་</strong></th>
+									<th class="fs-2"><strong>རིས་མོ་</strong></th>
+									<th class="fs-2"><strong>བཟོ་བསྐྲུན་</strong></th>
+									<th class="fs-2"><strong>ཁ་དོག་</strong></th>
+									<th class="fs-2"><strong>གཡུ་བྱུ་རུ་</strong></th>
+									<th class="fs-2"><strong>འགོར་ཚད་</strong></th>
+									<th class="fs-2"><strong>གསེར་སྦྲོན</strong></th>
+									<th class="fs-2"><strong>བཟོ་མི་</strong></th>
+									<th class="fs-2"><strong>ཚད་</strong></th>	
+									<th class="fs-2"><strong>གྲངས་ཁ་</strong></th>	
+									<th class="fs-2"><strong>ལྗིད་ཚད་</strong></th>	
+									<th class="fs-2"><strong>གོང་ཚད་</strong></th>	
+									<th class="fs-2"><strong>ཕུལ་མི་</strong></th>	
+									<th class="fs-2"><strong>ཁ་གསལ་གཞན་</strong></th>	
+									<th class="fs-2"><strong>ཉམས་སྐྱོན་</strong></th>	
+									<th class="fs-2"><strong>ངོས་འཛིན་</strong></th>
+									<th class="fs-2"><strong>ལོ་རྒྱུས་</strong></th>	
+									<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+									<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['VillageDz']; ?></td>
+									<td><?php echo $row['LhakhangNameDz']; ?></td>
+									<td><?php echo $row['LhaSectionNameDz']; ?></td>
+									<td><?php echo $row['LhaBuilderDz']; ?></td>
+									<td><?php echo $row['LhaCenturyDz']; ?></td>
+									<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+									<td><?php echo $row['TenDescriptionDz']; ?></td>
+									<td><?php echo $row['TenMaterialDz']; ?></td>
+									<td><?php echo $row['TenDesign']; ?></td>
+									<td><?php echo $row['TenPatternDz']; ?></td>
+									<td><?php echo $row['TenMadePlaceDz']; ?></td>
+									<td><?php echo $row['TenColorDz']; ?></td>
+									<td><?php echo $row['TenJwellWornDz']; ?></td>
+									<td><?php echo $row['TenCircumferenceDz']; ?></td>
+									<td><?php echo $row['TenGoldScriptDz']; ?></td>
+									<td><?php echo $row['TenSculpturDz']; ?></td>
+									<td><?php echo $row['TenSizeDz']; ?></td>
+									<td><?php echo $row['TenQtyDz']; ?></td>
+									<td><?php echo $row['TenWeightDz']; ?></td>
+									<td><?php echo $row['TenCostDz']; ?></td>
+									<td><?php echo $row['TenPresentedByDz']; ?></td>
+									<td><?php echo $row['TenOtherRemarksDz']; ?></td>
+									<td><?php echo $row['TenConditionDz']; ?></td>
+									<td><?php echo $row['TenIdentificationDz']; ?></td>
+									<td><?php echo $row['TenStoryDz']; ?></td>
+									<td><?php echo $row['TenCaretakerDz']; ?></td>
+									<td><?php echo $row['TenCheckedByDz']; ?></td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody><?php break;
+							case "8":?>
+							<thead>
+								<tr >
+									<th>#</th>
+									<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+									<th class="fs-2"><strong>གཡུས།</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+									<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+									<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+									<th class="fs-2"><strong>དུས་རབས།</strong></th>
+									<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+									<th class="fs-2"><strong>མཚན་གསལ།</strong></th>
+									<th class="fs-2"><strong>རྒྱུ།</strong></th>
+									<th class="fs-2"><strong>བཞུགས་ཚུལ།</strong></th>
+									<th class="fs-2"><strong>སྲོག་ཞུ།</strong></th>
+									<th class="fs-2"><strong>བཛོད་སྤུར།</strong></th>
+									<th class="fs-2"><strong>ཕྱག་མཚན།</strong></th>
+									<th class="fs-2"><strong>ཞལ་དང་སྐུ་གཟུགས་ཀྱི་གསེར།</strong></th>
+									<th class="fs-2"><strong>གལུ་བྱུ་རུ།</strong></th>
+									<th class="fs-2"><strong>པད་ཁྲིའི་དབྱེ་བ།</strong></th>
+									<th class="fs-2"><strong>བཟོ་དབྱེ་བས།</strong></th>
+									<th class="fs-2"><strong>རྒྱབ་ཡོལ།</strong></th>	
+									<th class="fs-2"><strong>སྐུ་མདོང།</strong></th>	
+									<th class="fs-2"><strong>གཤམ་ཚད་སི་ཨེམ།</strong></th>	
+									<th class="fs-2"><strong>སྐུའི་རིང་ཚད་སི་ཨེམ།</strong></th>	
+									<th class="fs-2"><strong>གྲངས་ཁ།</strong></th>	
+									<th class="fs-2"><strong>ལྗི་ཚད།</strong></th>	
+									<th class="fs-2"><strong>གོང་ཚད།</strong></th>	
+									<th class="fs-2"><strong>ན་བཟའ།</strong></th>
+									<th class="fs-2"><strong>དུས་རབས།</strong></th>	
+									<th class="fs-2"><strong>འབྱུང་ཁུངས་</strong></th>
+									<th class="fs-2"><strong>ཚོན་གྱི་དབྱེ་བ།</strong></th>
+									<th class="fs-2"><strong>ངོས་འཛིན།</strong></th>
+									<th class="fs-2"><strong>ལོ་རྒྱུས།</strong></th>
+									<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+									<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['VillageDz']; ?></td>
+									<td><?php echo $row['LhakhangNameDz']; ?></td>
+									<td><?php echo $row['LhaSectionNameDz']; ?></td>
+									<td><?php echo $row['LhaBuilderDz']; ?></td>
+									<td><?php echo $row['LhaCenturyDz']; ?></td>
+									<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+									<td><?php echo $row['TenDescriptionDz']; ?></td>
+									<td><?php echo $row['TenMaterialDz']; ?></td>
+									<td><?php echo $row['TenPostureDz']; ?></td>
+									<td><?php echo $row['TenTreasureDz']; ?></td>
+									<td><?php echo $row['TenForeHeadDz']; ?></td>
+									<td><?php echo $row['TenHandArticleDz']; ?></td>
+									<td><?php echo $row['TenFaceDz']; ?></td>
+									<td><?php echo $row['TenJwellWornDz']; ?></td>
+									<td><?php echo $row['TenThroneDz']; ?></td>
+									<td><?php echo $row['TenAppreanceDz']; ?></td>
+									<td><?php echo $row['TenBackRestDz']; ?></td>
+									<td><?php echo $row['TenColorDz']; ?></td>
+									<td><?php echo $row['TenShapeDz']; ?></td>
+									<td><?php echo $row['TenSizeDz']; ?></td>
+									<td><?php echo $row['TenQtyDz']; ?></td>
+									<td><?php echo $row['TenWeightDz']; ?></td>
+									<td><?php echo $row['TenCostDz']; ?></td>
+									<td><?php echo $row['TenClothDz']; ?></td>
+									<td><?php echo $row['TenAgeDz']; ?></td>
+									<td><?php echo $row['TenSourceDz']; ?></td>
+									<td><?php echo $row['TenQualtyDz']; ?></td>
+									<td><?php echo $row['TenStoryDz']; ?></td>
+									<td><?php echo $row['TenIdentificationDz']; ?></td>
+									<td><?php echo $row['TenCaretakerDz']; ?></td>
+									<td><?php echo $row['TenCheckedByDz']; ?></td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+							<?php 
+							break;case "9":?>
+								<thead>
+									<tr >
+										<th>#</th>
+										<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+										<th class="fs-2"><strong>གཡུས།</strong></th>
+										<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+										<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+										<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+										<th class="fs-2"><strong>དུས་རབས།</strong></th>
+										<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+										<th class="fs-2"><strong>ལྷ་ཚོགས་</strong></th>
+										<th class="fs-2"><strong>རྒྱུ།</strong></th>
+										<th class="fs-2"><strong>ཚད་</strong></th>
+										<th class="fs-2"><strong>གཤམ་ཚད་</strong></th>
+										<th class="fs-2"><strong>ལྗིད་ཚད</strong></th>
+										<th class="fs-2"><strong>མདོང་</strong></th>
+										<th class="fs-2"><strong>ཉི་མ་</strong></th>
+										<th class="fs-2"><strong>ཟླ་བ་</strong></th>
+										<th class="fs-2"><strong>ཟར་ཚགས་</strong></th>
+										<th class="fs-2"><strong>འཁོར་ལོ་</strong></th>
+										<th class="fs-2"><strong>བུམ་པ་</strong></th>	
+										<th class="fs-2"><strong>སྒོ་ཁྱིམ་</strong></th>	
+										<th class="fs-2"><strong>གསེར་སྒྲོན་</strong></th>	
+										<th class="fs-2"><strong>གཡུ་བྱུ་རུ་</strong></th>	
+										<th class="fs-2"><strong>ལོ་ཚད་</strong></th>
+										<th class="fs-2"><strong>གཟུངས་གཞུག་སྐུ་</strong></th>	
+										<th class="fs-2"><strong>རྒྱུ་ཚད་</strong></th>	
+										<th class="fs-2"><strong>ཉམས་སྐྱོན་</strong></th>	
+										<th class="fs-2"><strong>གྲངས་ཁ་</strong></th>	
+										<th class="fs-2"><strong>ཚོན་གྱི་དབྱེ་་བ་</strong></th>	
+										<th class="fs-2"><strong>ངོས་འཛིན་</strong></th>
+										<th class="fs-2"><strong>ལོ་རྒྱུས་</strong></th>	
+										<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+										<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+									<tr>
+										<td><?php  echo $i++; ?></td>								       
+										<td><?php echo $row['GewogNameDz']; ?></td>
+										<td><?php echo $row['VillageDz']; ?></td>
+										<td><?php echo $row['LhakhangNameDz']; ?></td>
+										<td><?php echo $row['LhaSectionNameDz']; ?></td>
+										<td><?php echo $row['LhaBuilderDz']; ?></td>
+										<td><?php echo $row['LhaCenturyDz']; ?></td>
+										<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+										<td><?php echo $row['TenDescriptionDz']; ?></td>
+										<td><?php echo $row['TenMaterialDz']; ?></td>
+										<td><?php echo $row['TenSizeDz']; ?></td>
+										<td><?php echo $row['TenShapeDz']; ?></td>
+										<td><?php echo $row['TenWeightDz']; ?></td>
+										<td><?php echo $row['TenColorDz']; ?></td>
+										<td><?php echo $row['TenSunDz']; ?></td>
+										<td><?php echo $row['TenMoonDz']; ?></td>
+										<td><?php echo $row['TenShadeDz']; ?></td>
+										<td><?php echo $row['TenRingDz']; ?></td>
+										<td><?php echo $row['TenBumpaDz']; ?></td>
+										<td><?php echo $row['TenWindowDz']; ?></td>
+										<td><?php echo $row['TenSertoDz']; ?></td>
+										<td><?php echo $row['TenJwellWornDz']; ?></td>
+										<td><?php echo $row['TenAgeDz']; ?></td>
+										<td><?php echo $row['TenLifeImageDz']; ?></td>
+										<td><?php echo $row['TenMaterialHeightDz']; ?></td>
+										<td><?php echo $row['TenConditionDz']; ?></td>
+										<td><?php echo $row['TenQtyDz']; ?></td>
+										<td><?php echo $row['TenQualtyDz']; ?></td>
+										<td><?php echo $row['TenIdentificationDz']; ?></td>
+										<td><?php echo $row['TenStoryDz']; ?></td>
+										<td><?php echo $row['TenCaretakerDz']; ?></td>
+										<td><?php echo $row['TenCheckedByDz']; ?></td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+								<?php 
+							break;case "10":?>
+								<thead>
+									<tr >
+										<th>#</th>
+										<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+										<th class="fs-2"><strong>གཡུས།</strong></th>
+										<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+										<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+										<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+										<th class="fs-2"><strong>དུས་རབས།</strong></th>
+										<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+										<th class="fs-2"><strong>མཚན་གསལ</strong></th>
+										<th class="fs-2"><strong>དབུ་ཤོག་</strong></th>
+										<th class="fs-2"><strong>ཤོག་གུའི་དབྱེ་བ་</strong></th>
+										<th class="fs-2"><strong>ཡིག་རིགས་</strong></th>
+										<th class="fs-2"><strong>སྣག་ཚ་</strong></th>
+										<th class="fs-2"><strong>ཤོག་གྲངས་</strong></th>
+										<th class="fs-2"><strong>རྩོམ་པ་པོ་</strong></th>
+										<th class="fs-2"><strong>དཀྱུས་ཚད་སི་ཨེམ་</strong></th>
+										<th class="fs-2"><strong>ཚད་སི་ཨེམ་</strong></th>
+										<th class="fs-2"><strong>ལོ་ཚད</strong></th>
+										<th class="fs-2"><strong>སྤུར་རས་</strong></th>	
+										<th class="fs-2"><strong>གདོང་དར</strong></th>	
+										<th class="fs-2"><strong>ཆབ་བཅིངས་</strong></th>	
+										<th class="fs-2"><strong>གླེགས་ཤིང་རིས་མོ་</strong></th>	
+										<th class="fs-2"><strong>པོ་ཏི་གྲངས་</strong></th>
+										<th class="fs-2"><strong>གོང་ཚད་</strong></th>	
+										<th class="fs-2"><strong>ཉམས་སྐྱོན་</strong></th>	
+										<th class="fs-2"><strong>ངོས་འཛིན་</strong></th>	
+										<th class="fs-2"><strong>ལོ་རྒྱུས་</strong></th>		
+										<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+										<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+									<tr>
+										<td><?php  echo $i++; ?></td>								       
+										<td><?php echo $row['GewogNameDz']; ?></td>
+										<td><?php echo $row['VillageDz']; ?></td>
+										<td><?php echo $row['LhakhangNameDz']; ?></td>
+										<td><?php echo $row['LhaSectionNameDz']; ?></td>
+										<td><?php echo $row['LhaBuilderDz']; ?></td>
+										<td><?php echo $row['LhaCenturyDz']; ?></td>
+										<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+										<td><?php echo $row['TenDescriptionDz']; ?></td>
+										<td><?php echo $row['TenFrontPageDz']; ?></td>
+										<td><?php echo $row['TenPaperDz']; ?></td>
+										<td><?php echo $row['TenCaligraphDz']; ?></td>
+										<td><?php echo $row['TenInkDz']; ?></td>
+										<td><?php echo $row['TenPagesDz']; ?></td>
+										<td><?php echo $row['TenAuthorDz']; ?></td>
+										<td><?php echo $row['TenLengthdz']; ?></td>
+										<td><?php echo $row['TenSizeDz']; ?></td>
+										<td><?php echo $row['TenAgeDz']; ?></td>
+										<td><?php echo $row['TenCoverDz']; ?></td>
+										<td><?php echo $row['TenDongdarDz']; ?></td>
+										<td><?php echo $row['TenBeltRingDz']; ?></td>
+										<td><?php echo $row['TenDesign']; ?></td>
+										<td><?php echo $row['TenVolumeDz']; ?></td>
+										<td><?php echo $row['TenCostDz']; ?></td>
+										<td><?php echo $row['TenConditionDz']; ?></td>
+										<td><?php echo $row['TenIdentificationDz']; ?></td>
+										<td><?php echo $row['TenStoryDz']; ?></td>
+										<td><?php echo $row['TenCaretakerDz']; ?></td>
+										<td><?php echo $row['TenCheckedByDz']; ?></td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody><?php 
+							break;case "11":?>
+							<thead>
+								<tr >
+									<th>#</th>
+									<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+									<th class="fs-2"><strong>གཡུས།</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+									<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+									<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+									<th class="fs-2"><strong>དུས་རབས།</strong></th>
+									<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+									<th class="fs-2"><strong>མཚན་གསལ།</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཚོགས་གྲངས།</strong></th>
+									<th class="fs-2"><strong>གསེར་བྲིས།།</strong></th>
+									<th class="fs-2"><strong>བཟོ་བསྐྲུན།</strong></th>
+									<th class="fs-2"><strong>མཐའ་འཇའ།</strong></th>
+									<th class="fs-2"><strong>མཐོངས་</strong></th>
+									<th class="fs-2"><strong>ཞལ་ཁེབས་</strong></th>
+									<th class="fs-2"><strong>ཏོག་</strong></th>
+									<th class="fs-2"><strong>སྲིང་ཅུང་</strong></th>
+									<th class="fs-2"><strong>བཞེངས་མི་</strong></th>
+									<th class="fs-2"><strong>རྒྱབ་ཤབ་</strong></th>
+									<th class="fs-2"><strong>འབྱུང་ཁུངས་</strong></th>	
+									<th class="fs-2"><strong>མེ་ལོང་ཚད་</strong></th>	
+									<th class="fs-2"><strong>མཐའ་འཇའ་སྤྲགས་ཚད་</strong></th>	
+									<th class="fs-2"><strong>མེ་ལོ་ཚད་</strong></th>	
+									<th class="fs-2"><strong>གོང་ཚད</strong></th>	
+									<th class="fs-2"><strong>གྲངས་ཁ་</strong></th>	
+									<th class="fs-2"><strong>གོང་ཚད།</strong></th>	
+									<th class="fs-2"><strong>ཉམས་སྐྱོན་</strong></th>
+									<th class="fs-2"><strong>ཐང་ཤུབས་</strong></th>	
+									<th class="fs-2"><strong>ཚོན་གྱི་དབྱེ་བ་</strong></th>
+									<th class="fs-2"><strong>ངོས་འཛིན།</strong></th>
+									<th class="fs-2"><strong>ལོ་རྒྱུས།</strong></th>
+									<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+									<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['VillageDz']; ?></td>
+									<td><?php echo $row['LhakhangNameDz']; ?></td>
+									<td><?php echo $row['LhaSectionNameDz']; ?></td>
+									<td><?php echo $row['LhaBuilderDz']; ?></td>
+									<td><?php echo $row['LhaCenturyDz']; ?></td>
+									<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+									<td><?php echo $row['TenDescriptionDz']; ?></td>
+									<td><?php echo $row['TenNoofDeitiesDz']; ?></td>
+									<td><?php echo $row['TenGoldScriptDz']; ?></td>
+									<td><?php echo $row['TenTypeDz']; ?></td>
+									<td><?php echo $row['TenSideMatDz']; ?></td>
+									<td><?php echo $row['TenBotmMatDz']; ?></td>
+									<td><?php echo $row['TenCoverDz']; ?></td>
+									<td><?php echo $row['TenStickBotmDz']; ?></td>
+									<td><?php echo $row['TenBackRestDz']; ?></td>
+									<td><?php echo $row['TenColorDz']; ?></td>
+									<td><?php echo $row['TenHolderDz']; ?></td>
+									<td><?php echo $row['TenBuilderDz']; ?></td>
+									<td><?php echo $row['TenBackingDz']; ?></td>
+									<td><?php echo $row['TenSourceDz']; ?></td>
+									<td><?php echo $row['TenAgeDz']; ?></td>
+									<td><?php echo $row['TenAreaBoarderDz']; ?></td>
+									<td><?php echo $row['TenMeasurePaintedArDz']; ?></td>
+									<td><?php echo $row['TenCostDz']; ?></td>
+									<td><?php echo $row['TenQtyDz']; ?></td>
+									<td><?php echo $row['TenConditionDz']; ?></td>
+									<td><?php echo $row['TenCaseDz']; ?></td>
+									<td><?php echo $row['TenColorDz']; ?></td>
+									<td><?php echo $row['TenIdentificationDz']; ?></td>
+									<td><?php echo $row['TenCaretakerDz']; ?></td>
+									<td><?php echo $row['TenCheckedByDz']; ?></td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+							<?php 
+							break;case "12":?>
+							<thead>
+								<tr >
+									<th>#</th>
+									<th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+									<th class="fs-2"><strong>གཡུས།</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+									<th class="fs-2"><strong>ནང་གསེས།</strong></th>
+									<th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+									<th class="fs-2"><strong>དུས་རབས།</strong></th>
+									<th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཚོགས་</strong></th>
+									<th class="fs-2"><strong>ཕྱོགས་</strong></th>
+									<th class="fs-2"><strong>གསེར་བྲིས་</strong></th>
+									<th class="fs-2"><strong>ལྷ་ཚོགས་གྲངས་</strong></th>
+									<th class="fs-2"><strong>བྲིས་གཞི་</strong></th>
+									<th class="fs-2"><strong>བྲིས་ཐངས་</strong></th>
+									<th class="fs-2"><strong>ལྷ་བྲིས་པ་</strong></th>
+									<th class="fs-2"><strong>ཚོན་གྱི་དབྱེ་བ་</strong></th>
+									<th class="fs-2"><strong>ཚད་</strong></th>
+									<th class="fs-2"><strong>ལོ་ཚད</strong></th>
+									<th class="fs-2"><strong>རྒྱབ་ཡོལ་</strong></th>
+									<th class="fs-2"><strong>ངོས་འཛིན་</strong></th>	
+									<th class="fs-2"><strong>ལོ་རྒྱུས་</strong></th>	
+									<th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+									<th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['VillageDz']; ?></td>
+									<td><?php echo $row['LhakhangNameDz']; ?></td>
+									<td><?php echo $row['LhaSectionNameDz']; ?></td>
+									<td><?php echo $row['LhaBuilderDz']; ?></td>
+									<td><?php echo $row['LhaCenturyDz']; ?></td>
+									<td><?php echo $row['LhaOwnerNameDz']; ?></td>
+									<td><?php echo $row['TenDescriptionDz']; ?></td>
+									<td><?php echo $row['TenEastWestDz']; ?></td>
+									<td><?php echo $row['TenGoldScriptDz']; ?></td>
+									<td><?php echo $row['TenNoofDeitiesDz']; ?></td>
+									<td><?php echo $row['TenTechniqueDz']; ?></td>
+									<td><?php echo $row['TenGroundDz']; ?></td>
+									<td><?php echo $row['TenPainterDz']; ?></td>
+									<td><?php echo $row['TenQualtyDz']; ?></td>
+									<td><?php echo $row['TenSizeDz']; ?></td>
+									<td><?php echo $row['TenAgeDz']; ?></td>
+									<td><?php echo $row['TenCurtainDz']; ?></td>
+									<td><?php echo $row['TenIdentificationDz']; ?></td>
+									<td><?php echo $row['TenStoryDz']; ?></td>
+									<td><?php echo $row['TenCaretakerDz']; ?></td>
+									<td><?php echo $row['TenCheckedByDz']; ?></td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+							<?php break;
+							  default:?>
+							  <thead>
+							  	<tr >
+								  <th>#</th>
+								  <th class="fs-2"><strong>རྒེད་འོག།</strong></th>
+								  <th class="fs-2"><strong>གཡུས།</strong></th>
+								  <th class="fs-2"><strong>ལྷ་ཁང་གི་མིང།</strong></th>
+								  <th class="fs-2"><strong>ནང་གསེས།</strong></th>
+								  <th class="fs-2"><strong>བཞེངས་མི།</strong></th>
+								  <th class="fs-2"><strong>དུས་རབས།</strong></th>
+								  <th class="fs-2"><strong>དབྱེ་བ་གཞན་</strong></th>
+								  <th class="fs-2"><strong>ལྷ་ཚོགས་</strong></th>
+								  <th class="fs-2"><strong>ཕྱོགས་</strong></th>
+								  <th class="fs-2"><strong>གསེར་བྲིས་</strong></th>
+								  <th class="fs-2"><strong>ལྷ་ཚོགས་གྲངས་</strong></th>
+								  <th class="fs-2"><strong>བྲིས་གཞི་</strong></th>
+								  <th class="fs-2"><strong>བྲིས་ཐངས་</strong></th>
+								  <th class="fs-2"><strong>ལྷ་བྲིས་པ་</strong></th>
+								  <th class="fs-2"><strong>ཚོན་གྱི་དབྱེ་བ་</strong></th>
+								  <th class="fs-2"><strong>ཚད་</strong></th>
+								  <th class="fs-2"><strong>ལོ་ཚད</strong></th>
+								  <th class="fs-2"><strong>རྒྱབ་ཡོལ་</strong></th>
+								  <th class="fs-2"><strong>ངོས་འཛིན་</strong></th>	
+								  <th class="fs-2"><strong>ལོ་རྒྱུས་</strong></th>	
+								  <th class="fs-2"><strong>དཀོན་གཉེར་གྱི་མིང་རྟགས།།</strong></th>
+								  <th class="fs-2"><strong>ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</strong></th>
+							  </tr>
+						  </thead>
+						  <tbody>
+							  <tr></tr>
+						 </tbody><?php
+							}?>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','search_pagination.phtml', 
+						array('route' => 'ngreport/paginator','action'=>'nangtenreport','id'=>$data['dzongkhag']."_".$data['category']."_".$data['subcategory']));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('select#group').on('change', function(){
+	$.post(
+        "<?php echo $this->url("ngreport", array("action" => "getcategory")); ?>",
+            {
+                groupId: $(this).val(),
+            },
+            function(data){
+                $("select#category").html(data.categoryValue);
+                $('select#category').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#category').on('change', function(){
+	$.post(
+        "<?php echo $this->url("ngreport", array("action" => "getsubcategory")); ?>",
+            {
+                categoryId: $(this).val(),
+            },
+            function(data){
+                $("select#subcategory").html(data.subcategoryValue);
+                $('select#subcategory').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				dzongkhag: {
+					validators: {
+						notEmpty: {
+							message: 'Please select dzongkhag.'
+						},
+					}
+				},
+				group: {
+					validators: {
+						notEmpty: {
+							message: 'Please select group.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		}).on('core.element.validated', function (e) {
+			if (e.valid) {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+			} else {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+			}
+		});
+		$('form select').chosen().change(function () {
+			fv.revalidateField($(this).attr('name'));
+		});
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

@@ -1,0 +1,29 @@
+<?php  
+	$param = $this->process."-".$this->process_id."-".$this->applicationNO; 
+	$file_array = $this->attachment($param);  
+	if(sizeof($file_array) > 0 ){?>
+<div class="row"> 
+	<div class="col-lg-12">		
+		<?php $sl = 1;foreach ($file_array as $attachment):
+		echo $sl++.". <strong>".$attachment['description']."</strong><small> uploaded on <i class='green'>".$this->dateformat($attachment['modified'])."</i></small>";?>
+		<a style="text-decoration:none" href="<?php echo $this->url('upload', array('action'=>'render', 'id'=>$attachment['id'])); ?>"> 
+			<strong>&nbsp;<i class="ti icon ti-download"> </i></strong>
+		</a><?php if($this->login_id == $attachment['author']){ ?> |
+		<a style="text-decoration:none" href="<?php echo $this->url('upload', array('action'=>'remove', 'id'=>$attachment['id'])); ?>" onclick="return confirm('Are you sure you want to delete?');">
+			<i class="text-red icon ti ti-trash"> </i>
+		</a>
+		<?php } ?>
+		<br/>
+		<?php endforeach; ?>
+	</div>
+</div>
+<?php }else{ echo "No Attachment"; }?>
+<div class="row">
+	<div class="col-lg-12">
+		<span data-bs-toggle='tooltip' data-bs-placement='top' title='Attach'>
+			<a style="text-decoration:none" href="<?php echo $this->url('upload', array('action'=>'upload-form', 'id' => $this->process."-".$this->process_id."-".$this->applicationNO)); ?>" data-bs-toggle='modal' data-bs-target='#modal'>
+				<i class='ti ti-paperclip'></i>Attach File
+			</a>
+		</span>
+	</div>
+</div>

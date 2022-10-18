@@ -1,0 +1,157 @@
+<?php 
+/**
+ * View -- of Acl/ButtonController/manageaclprocess
+ * chophel@athang.com -- 2022
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($aclprocess as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('button', array('action' => 'manageaclprocess','id'=>$page)); ?>"  enctype="multipart/form-data" >                  
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title.": ".$row['process']; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<input type="hidden" id="process_id" name="process_id" value="<?php echo $row['id'];?>" />
+			<input type="hidden" id="resource" name="resource" value="<?php echo $row['resource'];?>" />
+			<div class="form-group mb-3 col-lg-4">  
+				<label class="form-label" for="process">Process</label>
+				<input type="text" class="form-control" value="<?php echo $row['process'];?>" name="process" id="process" required /> 
+			</div>
+			<div class="form-group mb-3 col-lg-8">  
+				<label class="form-label" for="description">Description</label>
+				<input type="text" class="form-control" value="<?php echo $row['description'];?>" name="description" id="description" required /> 
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-3"> 
+				<label class="form-label" for="location">Location Permission</label><br>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="location" name="location" value="1" <?php echo ($row['location']=='1')?'checked':'';?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="location" name="location" value="0" <?php echo ($row['location']=='0')?'checked':'';?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-3"> 
+				<label class="form-label" for="only_if_creator">Only If Creator Permission</label><br>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="only_if_creator" name="only_if_creator" value="1" <?php echo ($row['only_if_creator']=='1')?'checked':'';?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="only_if_creator" name="only_if_creator" value="0" <?php echo ($row['only_if_creator']=='0')?'checked':'';?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-3"> 
+				<label class="form-label" for="status">Status Permission</label><br>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="status" name="status" value="1" <?php echo ($row['status']=='1')?'checked':'';?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" id="status" name="status" value="0" <?php echo ($row['status']=='0')?'checked':'';?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-12">
+				<label class="form-label" for="permission_level">Permission Level</label>
+				<?php $status_array = explode(",", $row['permission_level']);?>
+				<select multiple class="form-select" name="permission_level[]" id="permission_level" data-placeholder="Select" >
+					<?php foreach($status as $srow):?>
+						<option value="<?php echo $srow['id'];?>" <?php echo (in_array($srow['id'],$status_array))?'selected':'';?>>
+							<?php echo $srow['status'];?>
+						</option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			process: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide process.'
+					}
+				}
+			},
+			description: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide description.'
+					}
+				}
+			},
+			location: {
+				validators: {
+					notEmpty: {
+						message: 'Please select location permission.'
+					}
+				}
+			},
+			only_if_creator: {
+				validators: {
+					notEmpty: {
+						message: 'Please select only if creator permission.'
+					}
+				}
+			},
+			status: {
+				validators: {
+					notEmpty: {
+						message: 'Please select status permission.'
+					}
+				}
+			},
+			'permission_level[]': {
+				validators: {
+					choice: {
+						min: 0,
+						max: 20,
+						message: 'Please choose 0 - all permission level/s.',
+					},
+				}
+			},
+		},
+		plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    }).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+});
+</script>

@@ -1,0 +1,58 @@
+<?php
+/**
+ * Auth --- login
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?> 
+<div class="container-tight">
+	<div class="text-center">
+		<a href="<?php echo $this->url('auth', array('action' => 'forgotpwd'));?>" class="navbar-brand navbar-brand-autodark"><img src="<?php echo $this->basePath() . '/images/front_logo.png'; ?>" alt="PMS-FSAPP"></a>
+	</div>
+	<form id="#form" class="card card-md" action="<?php echo $this->url('auth', array('action' => 'forgotpwd'));?>" method="POST">
+		<div class="card-body">
+			<h2 class="card-title text-center">Forget Password?</h2>
+			<div class="mb-3">
+                <label class="form-label">Enter your email below to reset your password.</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="icon ti ti-mail"></i></span>
+                    <input type="email" class="form-control" name="email" placeholder="Email Address">
+                </div>
+            </div>
+			<div class="form-footer">
+				<button type="submit" class="btn btn-primary w-100"><i class="icon ti ti-device-floppy"></i>Submit</button>
+			</div>
+			<p class="text-info">The password will be reset and sent to your registered email address.</p>
+		</div>
+		<div class="hr-text">or</div>
+		<div class="text-center text-muted mt-3 mb-3">
+			<a href="<?php echo $this->url('auth', array('action' => 'login')); ?>" tabindex="-1">Sign In</a>
+		</div>
+	</form>
+</div>
+<script>
+	document.addEventListener('DOMContentLoaded', function (e) {
+		FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				email: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide email address'
+						},
+						emailAddress: {
+	                        message: 'Please provide valid email address'
+	                    }
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		});
+	});
+</script>

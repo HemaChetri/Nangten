@@ -1,0 +1,180 @@
+<?php 
+/**
+ * View -- of Acl/AclController/manageacl
+ * chophel@athang.com -- 2022
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($acl as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('button', array('action' => 'manageacl','id'=>$page)); ?>"  enctype="multipart/form-data" >                  
+<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title.": ".$row['menu']; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<input type="hidden" id="acl_id" name="acl_id" value="<?php echo $row['id'];?>" />
+			<input type="hidden" id="resource" name="resource" value="<?php echo $row['resource'];?>" />
+			<div class="form-group mb-3 col-lg-4">  
+				<label class="form-label" for="role">ACL Role</label>
+				<select id="role" name="role" class="form-select" data-placeholder="Select">
+					<?php foreach($roles as $role):?>
+					<option value="<?php echo $role['id'];?>" <?php echo ($role['id']==$row['role'])?'selected':'';?>>
+						<?php echo $role['role'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-4">  
+				<label class="form-label" for="process">Process</label>
+				<select class="form-select" name="process" id="process" data-placeholder="Select" > 
+					<option value="0" <?php echo ($row['process']=='0')?'selected':'';?>>-NA-</option>
+					<?php foreach($this->processObj->get(array('resource'=>$row['resource'])) as $process):?>
+					<option value="<?php echo $process['id'];?>" <?php echo ($process['id']==$row['process'])?'selected':'';?>>
+						<?php echo $process['process'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-4">  
+				<label class="form-label" for="process_action">Process Action</label>
+				<select class="form-select" name="process_action" id="process_action" data-placeholder="Select" > 
+					<option value="0">-NA-</option>
+					<?php foreach($pactions as $paction):?>
+					<option value="<?php echo $paction['id'];?>" <?php echo ($paction['id']==$row['process_action'])?'selected':'';?>>
+						<?php echo $paction['action'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<?php if($row['process']>0):
+			$process_permissions = $this->processObj->getColumn($row['process'],'permission_level');
+			$permission_array = explode(",", $process_permissions);
+			$permission_status = array();
+			for($i=0;$i<sizeof($permission_array);$i++):
+				$status_data = array(
+					'status_id' => $permission_array[$i],
+					'status'    => ($permission_array[$i]>0)?$this->statusObj->getColumn($permission_array[$i],'status'):'',
+				);
+				array_push($permission_status,$status_data);
+			endfor;
+		endif;
+		?>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-4">  
+				<label class="form-label" for="permission_level">Permission Level</label>
+				<select class="form-select" name="permission_level" id="permission_level" data-placeholder="Select" > 
+					<option value="0" <?php echo ($row['permission_level']=='0')?'selected':'';?>>All Levels</option>
+					<?php if($row['process']>0): foreach($permission_status as $status_row):?>
+					<option value="<?php echo $status_row['status_id'];?>" <?php echo ($status_row['status_id']==$row['permission_level'])?'selected':'';?>>
+						<?php echo $status_row['status'];?></option>
+					<?php endforeach;endif;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-4">  
+				<label for="dashboard" class="form-label">Dashboard Display</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="dashboard" id="dashboard" value="1" <?php echo ($row['dashboard']=='1')?"checked":"";?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="dashboard" id="dashboard" value="0" <?php echo ($row['dashboard']=='0')?"checked":"";?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-4"> 
+				<label for="system" class="form-label">System Privilege</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="system" id="system" value="1" <?php echo ($row['system']=='1')?"checked":"";?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="system" id="system" value="0" <?php echo ($row['system']=='0')?"checked":"";?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	$('select#process').on('change',function(){
+		$.post(
+			"<?php echo $this->url('button', array('action' => 'getpermissionlevel'));?>",
+			{
+				process: $(this).val(),
+			},
+			function(data){
+				//console.log(data);
+				$('select#permission_level').html(data.level);
+				$('select#permission_level').trigger('chosen:updated');
+			},
+			'json'
+		   );
+	});
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			role: {
+				validators: {
+					notEmpty: {
+						message: 'Please select role.'
+					}
+				}
+			},
+			process: {
+				validators: {
+					notEmpty: {
+						message: 'Please select process.'
+					}
+				}
+			},
+			process_action: {
+				validators: {
+					notEmpty: {
+						message: 'Please select process action.'
+					}
+				}
+			},
+			dashboard: {
+				validators: {
+					notEmpty: {
+						message: 'Please choose dashboard display.'
+					}
+				}
+			},
+			system: {
+				validators: {
+					notEmpty: {
+						message: 'Please choose system privilege.'
+					}
+				}
+			},
+		},
+		plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    }).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+});
+</script>

@@ -1,0 +1,154 @@
+<?php 
+/**
+ * chophel@athang.com -- 2022
+ * View -- of Acl/ButtonController/aclAction
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(41,43,45,47)); ?>
+					<div class="card-header">
+						<div class="col-6">
+							<form method="POST">
+								<div class="form-group mb-3 row">
+									<label class="form-label col-4 col-form-label">Module</label>
+									<div class="col">
+										<select id="module" name="module" class="form-select" data-placeholder="Select">
+											<?php foreach($this->modules as $module):?>
+											<?php $selected = ($module['id']==$this->resource)?'selected':'';?>
+												<option value="<?php echo $module['id']?>"<?php echo $selected;?>><?php echo $module['module'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Menu/*Sub-Menu/**Item</th>
+									<th>Resource/Privilege</th>	
+									<th>Acl Role</th>
+									<th>Process</th>
+									<th>Process Action</th>
+									<th>Permission Level</th>
+									<th>Dashboard</th>
+									<th>System</th>
+									<?php if($this->button(1)!=""):?>
+									<th class='no-sort'>Action</th>
+									<?php endif;?>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=1+(($page-1)*20); foreach ($paginator as $acl):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>	       
+									<td><?php if (strlen($acl['tabindex']) == 1 ): ?>
+										<?php echo $acl['menu']; ?>
+									<?php elseif (strlen($acl['tabindex']) == 2):?>	
+										<?php echo "<b class='text-blue fs-3'>*</b>".$acl['menu']; ?>
+									<?php else: ?>	
+										<?php echo "<b class='text-blue fs-3'>*</b><b class='text-yellow fs-3'>*</b>".$acl['menu']; ?>							
+									<?php endif; ?></td>
+									<td><?php echo $acl['controller']."/".$acl['action']; ?></td>
+									<td><?php echo $this->roleObj->getColumn($acl['role'],'role'); ?></td>
+									<td><strong><?php echo ($acl['process']!='0')?$this->processObj->getColumn($acl['process'],'process'):'-';?></strong></td>
+									<td><strong><?php echo ($acl['process_action']!='0')?$this->pactionObj->getColumn($acl['process_action'],'action'):'-'; ?></strong></td>
+									<td class="text-center"><?php echo ($acl['permission_level']!='0')?"<span class='badge bg-".$this->statusObj->getColumn($acl['permission_level'],'label')."-lt'>".$this->statusObj->getColumn($acl['permission_level'],'status')."</span>":"<span class='badge bg-dark-lt'>All Levels</span>"; ?></td>
+									<td class="text-center"><?php echo ($acl['dashboard']=='1')?"<span class='icon ti ti-check text-green'></span>":"<span class='icon ti ti-x text-red'></span>"; ?></td>
+									<td class="text-center"><?php echo ($acl['system']=='1')?"<span class='icon ti ti-check text-green'></span>":"<span class='icon ti ti-x text-red'></span>"; ?></td>
+									<?php if($this->button(1)!=""):?>
+									<td><?php echo $this->button(1, $acl['id'].'_'.$page);?></td>
+									<?php endif;?>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','search_pagination.phtml', 
+							array('route' => 'button/paginator','action'=>'acl','id'=>$this->resource,'role'=>'0','task'=>'0'));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#module').change(function(){
+		window.location.href="<?php echo $this->url('button',array('action'=>'acl'));?>/"+$(this).val();
+	});
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

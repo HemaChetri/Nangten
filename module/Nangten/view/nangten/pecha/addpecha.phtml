@@ -1,0 +1,355 @@
+<?php 
+/**
+ * View -- of Nangten/PechaController/addpechaAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title"><i class="icon ti ti-user-plus"></i><?php echo $this->title;?></h3>
+					</div>
+					<form id="#form" method="post" action="<?php echo $this->url('pecha', array('action' => 'addpecha')); ?>" enctype="multipart/form-data" >
+						<div class="card-body">
+						<h4 class="fs-2"><strong><i>དབྱེ་ཁག།</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+						 <div class="row">
+								<div class="form-group mb-3 col-lg-6">
+									<label for="category" class="form-label">དབྱེ་ཁག།</label>
+									<div class="input-group mb-2">
+										<select id="category" name="category" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+											<?php foreach($category as $categorys):?>
+												<option value="<?php echo $categorys['id']?>">
+													<?php echo $categorys['category'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group mb-3 col-lg-6">
+									<label for="subcategory" class="form-label">དབྱེ་ཁག་གི་ནང་གསེས།</label>
+									<div class="input-group mb-2">
+										<select id="subcategory" name="subcategory" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<h4 class="fs-2"><strong><i>ལྷ་ཁང་ཁ་གསལ།</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="DzongkhagId" class="form-label">རྫོང་ཁག་</label>
+									<div class="input-group mb-2">
+										<select id="DzongkhagId" name="DzongkhagId" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+											<?php foreach($dzongkahg as $dzos):?>
+												<option value="<?php echo $dzos['id']?>">
+													<?php echo $dzos['DzongkhagNameDz'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="dob" class="form-label">རྒེད་འོག་:</label>
+									<select id="GewogId" name="GewogId" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="name" class="form-label">གཡུས་</label>
+									<select id="VillageId" name="VillageId" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="email" class="form-label">ལྷ་ཁང་གི་མིང་</label>
+									<select id="LhakhangId" name="LhakhangId" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+										<?php foreach($lhakhang as $lhakhangs):?>
+											<option value="<?php echo $lhakhangs['id']?>">
+												<?php echo $lhakhangs['LhakhangNameDz'];?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="mobile" class="form-label">ནང་གསེས་</label>
+									<select id="LhaSectionId" name="LhaSectionId" class="form-control" data-placeholder="Select" >
+											<option value=""></option>
+										<?php foreach($section as $sections):?>
+											<option value="<?php echo $sections['id']?>">
+												<?php echo $sections['SectionNameDz'];?></option>
+										<?php endforeach;?>
+									</select>
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaBuilderDz" class="form-label">བཞེངས་མི།</label>
+									<input type="text" class="form-control" placeholder="བཞེངས་མི།" name="LhaBuilderDz" value="" autocomplete="off" required >	
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaCenturyDz" class="form-label">དུས་རབས།</label>
+									<input type="text" class="form-control" placeholder="དུས་རབས།" name="LhaCenturyDz" value="" autocomplete="off" required >	
+								</div>	
+								<div class="form-group mb-3 col-lg-4">
+									<label for="LhaOwnerNameDz" class="form-label">བདག་དབང།</label>
+									<input type="text" class="form-control" placeholder="བདག་དབང།" name="LhaOwnerNameDz" value="" autocomplete="off" required >	
+								</div>		
+							</div>
+							<h4 class="fs-2"><strong><i>ནང་རྟེན་ཁ་གསལ།</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+							    <div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="role">མཚན་གསལ།</label>
+									<input type="text" class="form-control" placeholder="མཚན་གསལ།" name="TenDescriptionDz" value="" autocomplete="off" required >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenFrontPageDz">དབུ་ཤོག།</label>
+									<input type="text" class="form-control" placeholder="དབུ་ཤོག།" name="TenFrontPageDz" value="" autocomplete="off" required >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenPaperDz">ཤོག་གུའི་དབྱེ་བ།</label>
+									<input type="text" class="form-control" placeholder="ཤོག་གུའི་དབྱེ་བ།" name="TenPaperDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenCaligraphDz" class="form-label">ཡིག་རིགས།</label>
+									<input type="text" class="form-control" placeholder="ཡིག་རིགས།" name=" TenCaligraphDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenInkDz">སྣག་ཚ།</label>
+									<input type="text" class="form-control" placeholder="སྣག་ཚ།" name="TenInkDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenPagesDz" class="form-label">ཤོག་གྲངས།</label>
+									<input type="text" class="form-control" placeholder="ཤོག་གྲངས།" name="TenPagesDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenAuthorDz">རྩོམ་པ་པོ།</label>
+									<input type="text" class="form-control" placeholder="རྩོམ་པ་པོ།" name="TenAuthorDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenLengthdz">དཀྱུས་ཚད་སི་ཨེ།</label>
+									<input type="text" class="form-control" placeholder="དཀྱུས་ཚད་སི་ཨེ།" name="TenLengthdz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenSizeDz" class="form-label">ཚད་སི་ཨེམ།</label>
+									<input type="text" class="form-control" placeholder="ཚད་སི་ཨེམ།" name="TenSizeDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenAgeDz" class="form-label">དུས་རབས།</label>
+									<input type="text" class="form-control" placeholder="དུས་རབས།" name="TenAgeDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCoverDz">སྤུར་རས།</label>
+									<input type="text" class="form-control" placeholder="སྤུར་རས།" name="TenCoverDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="TenDongdarDz" class="form-label">གདོང་དར།</label>
+									<input type="text" class="form-control" placeholder="གདོང་དར།" name="TenDongdarDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenBeltRingDz">ཆབ་བཅིངས།</label>
+									<input type="text" class="form-control" placeholder="ཆབ་བཅིངས།" name="TenBeltRingDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenDesign">གླེགས་ཤིང་རིས་མོ།</label>
+									<input type="text" class="form-control" placeholder="གླེགས་ཤིང་རིས་མོ།" name="TenDesign" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenVolumeDz">པོ་ཏི་གྲངས།</label>
+									<input type="text" class="form-control" placeholder="པོ་ཏི་གྲངས།" name="TenVolumeDz" value="" autocomplete="off"  >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCostDz">འབྱ྄ང་ཁུངས།</label>
+									<input type="text" class="form-control" placeholder="འབྱ྄ང་ཁུངས།" name="TenCostDz" value="" autocomplete="off"  >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenConditionDz">ཉམས་སྐྱོན།</label>
+									<input type="text" class="form-control" placeholder="ཉམས་སྐྱོན།" name="TenConditionDz" value="" autocomplete="off"  >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenIdentificationDz">ངོས་འཛིན།</label>
+									<input type="text" class="form-control" placeholder="ངོས་འཛིན།" name="TenIdentificationDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenStoryDz">ལོ་རྒྱུས།</label>
+									<input type="text" class="form-control" placeholder="ལོ་རྒྱུས།" name="TenStoryDz" value="" autocomplete="off" >
+								</div>
+							</div>
+							<h4 class="fs-2"><strong><i>དྲན་གསཽ།</i></strong></h4> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCaretakerDz">དཀོན་གཉེར་གྱི་མིང་རྟགས།</label>
+									<input type="text" class="form-control" placeholder="དཀོན་གཉེར་གྱི་མིང་རྟགས།" name="TenCaretakerDz" value="" autocomplete="off" >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="TenCheckedByDz">ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</label>
+									<input type="text" class="form-control" placeholder="ཞིབ་དཔྱོད་པའི་མིང་རྟགས།" name="TenCheckedByDz" value="" autocomplete="off" >
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<button type="submit" class="btn btn-success"><span class="icon ti ti-check"></span> Save</button>
+							<a class="btn btn-warning" onclick="javascript:history.back();"><span class="icon ti ti-x"></span> Cancel </a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('select#category').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getsubcategory")); ?>",
+            {
+                categoryId: $(this).val(),
+            },
+            function(data){
+                $("select#subcategory").html(data.subcategoryValue);
+                $('select#subcategory').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#DzongkhagId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getgewog")); ?>",
+            {
+                dzongkhagId: $(this).val(),
+            },
+            function(data){
+                $("select#GewogId").html(data.gewogValue);
+                $('select#GewogId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getvillage")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#VillageId").html(data.villageValue);
+                $('select#VillageId').trigger('chosen:updated');
+				$("select#LhakhangId").html(data.lhakhangValue);
+                $('select#LhakhangId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#LhakhangId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("ritual", array("action" => "getsection")); ?>",
+            {
+                lhaId: $(this).val(),
+            },
+            function(data){
+                $("select#LhaSectionId").html(data.sectionValue);
+                $('select#LhaSectionId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+		const fv = FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				DzongkhagId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select dzongkhag.'
+						},
+					}
+				},
+				GewogId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select gewog.'
+						},
+					}
+				},
+				LhakhangId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select lhakhang.'
+						},
+					}
+				},
+				VillageId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select village'
+						},
+					}
+				},
+				LhaSectionId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select section.'
+						}
+					}
+				},
+				TenMakeId: {
+					validators: {
+						notEmpty: {
+							message: 'Please select Msterial.'
+						}
+					}
+				},
+				TenCaretakerDz: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide care taker.'
+						}
+					}
+				},
+				TenCheckedByDz: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide Checker.'
+						}
+					}
+				},
+				category: {
+					validators: {
+						notEmpty: {
+							message: 'Please select category.'
+						}
+					}
+				},
+				subcategory: {
+					validators: {
+						notEmpty: {
+							message: 'Please select Sub category.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		}).on('core.element.validated', function (e) {
+			if (e.valid) {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+			} else {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+			}
+		});
+		$('form select').chosen().change(function () {
+			fv.revalidateField($(this).attr('name'));
+		});
+	});
+</script>

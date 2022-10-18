@@ -1,0 +1,29 @@
+<?php
+/**
+  * Layout --- Breadcrumb
+ * chophel@athang.com
+ */
+?>
+<div class="container-xl">
+	<ol class="breadcrumb" aria-label="breadcrumbs">
+		<?php $i =1; $breadcrumb = $this->breadcrumb();
+		foreach($breadcrumb as $bc_route):
+			extract($bc_route);
+				if(strlen($tabindex) > 2):
+					$url =$this->url($route, array('action'=>$action));
+				else:
+					$url = $this->url($route);
+				endif;				
+			?>	
+			<?php if($i++ == sizeof($breadcrumb)):?>		
+				<li class="breadcrumb-item active" aria-current="page">
+					<?php echo $menu;?>
+				</li>
+			<?php else:?>
+				<li class="breadcrumb-item">
+					<a href="<?php echo $url;?>"> <?php echo $menu;?></a>
+				</li>
+			<?php endif;?>
+		<?php endforeach;?>
+	</ol>
+</div>

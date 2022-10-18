@@ -1,0 +1,227 @@
+/*!
+* Athang v1.0.0 (https://athang.com)
+* @version 1.0.0
+* @link https://athang.com
+* Copyright 2022-2022 The Athang IC Tech
+* Copyright 2022-2022 chophel@athang.com
+*/
+/* ---------------------------------------------------------------------- */
+/*  Button -- Back to top Button
+/* ---------------------------------------------------------------------- */
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+/* ---------------------------------------------------------------------- */
+/*  Button -- Small btn icons for Table Action                            */
+/* ---------------------------------------------------------------------- */
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  vertical-align: bottom;
+  stroke-width: 1;
+}
+.btn .icon-sm {
+  width: 1rem;
+  height: 1rem;
+  min-width: 1rem;
+  margin: 0 -0.5rem 0 -0.5rem;
+  vertical-align: bottom;
+  color: inherit;
+}
+/* ---------------------------------------------------------------------- */
+/*  Form Wizard
+/* ---------------------------------------------------------------------- */
+ .swMain > ul {
+  display: table;
+  list-style: none;
+  padding: 10px 0;
+  position: relative;
+  width: 100%;
+  background: #f7f7f8;
+  border-radius: 5px;
+}
+
+.swMain > ul li {
+  display: table-cell;
+  text-align: center;
+  width: 1%;
+}
+
+.swMain > ul li > a:before {
+  border-top: 4px solid #c8c7cc;
+  content: "";
+  display: block;
+  font-size: 0;
+  height: 1px;
+  overflow: hidden;
+  position: relative;
+  top: 21px;
+  width: 100%;
+  z-index: 1;
+}
+
+.swMain > ul li:first-child > a:before {
+  left: 50%;
+  max-width: 51%;
+}
+
+.swMain > ul li:last-child > a:before {
+  max-width: 50%;
+  width: 50%;
+}
+
+.swMain > ul li > a.selected:before, .swMain li > a.done:before {
+  border-color: #007AFF;
+}
+
+.swMain > ul .stepNumber {
+  background-color: #ffffff;
+  border: 5px solid #c8c7cc;
+  border-radius: 100% 100% 100% 100%;
+  color: #546474;
+  display: inline-block;
+  font-size: 15px;
+  height: 40px;
+  line-height: 30px;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  z-index: 2;
+}
+
+.swMain > ul li > a.selected .stepNumber {
+  border-color: #007AFF;
+}
+
+.swMain ul li > a.done .stepNumber, .swMain > ul li:last-child > a.selected .stepNumber {
+  border-color: #007AFF;
+  background-color: #007AFF;
+  color: #fff;
+  text-indent: -9999px;
+}
+
+.swMain ul li > a.done .stepNumber:before, .swMain > ul li:last-child > a.selected .stepNumber:before {
+  content: "\ea5e";
+  display: inline;
+  float: right;
+  font-family:"jomolhari-v14-tibetan_latin-regular";
+  font-weight: 900;
+  font-size:20px;
+  height: auto;
+  text-shadow: none;
+  margin-right: 5px;
+  text-indent: 0;
+}
+
+.swMain ul li > a.done.wait .stepNumber {
+  background-color: #F6F6F6 !important;
+  color: #CCCCCC !important;
+  text-indent: -0px !important;
+}
+
+.swMain ul li > a.done.wait .stepNumber:before {
+  content: "" !important;
+}
+
+.swMain > ul li .stepDesc {
+  color: #8e8e93;
+  display: block;
+  font-size: 14px;
+  margin-top: 4px;
+  max-width: 100%;
+  table-layout: fixed;
+  text-align: center;
+  word-wrap: break-word;
+  z-index: 104;
+}
+
+.swMain > ul li > a.selected .stepDesc, .swMain li > a.done .stepDesc {
+  color: #2B3D53;
+}
+
+.swMain > ul li > a:hover {
+  text-decoration: none;
+}
+
+.swMain > ul li > a.disabled {
+  cursor: default;
+}
+
+.swMain .progress {
+  margin-bottom: 30px;
+}
+
+.swMain .stepContainer {
+  height: auto !important;
+}
+
+.swMain .loader {
+  display: none;
+}
+
+.swMain [class^="button"], .swMain [class*=" button"] {
+  display: none;
+}
+
+.swMain .close {
+  display: none;
+}
+/* ---------------------------------------------------------------------- */
+/*  Leaflet.js
+/* ---------------------------------------------------------------------- */
+.leaflet-map { height: 280px; }
+
+.leaflet-tooltip-own {
+  background-color: rgba(0, 0, 0, 0) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 11px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Canvas.js
+/* ---------------------------------------------------------------------- */
+.canvas-chart { 
+  height: 280px; 
+  max-width: 1100px; 
+  margin: 0px auto;
+}
+.canvasjs-chart-toolbar {
+  top: -20px !important;
+}
+/* ---------------------------------------------------------------------- */
+/*  Table -- Table-Responsive
+/* ---------------------------------------------------------------------- */
+.table-responsive {
+  overflow-y: hidden;
+}
+/* ---------------------------------------------------------------------- */
+/*  Breadcrumb -- Adjustments to Page Header & Body
+/* ---------------------------------------------------------------------- */
+.breadcrumb {
+  justify-content: flex-end;
+}
+.breadcrumb a {
+  color: steelblue;
+}
+.page-wrapper .page-header {
+  margin: 0rem 0 0;
+}
+.page-body {
+  margin-top: 0.25rem;
+}
+/* ---------------------------------------------------------------------- */
+/*  Top Navigation Bar -- Navbar-brand-image
+/* ---------------------------------------------------------------------- */
+.navbar-brand {
+  padding-top: 0rem; 
+  padding-bottom: 0rem;
+}
+.navbar-brand-image {
+  height: 2.5rem;
+}
+

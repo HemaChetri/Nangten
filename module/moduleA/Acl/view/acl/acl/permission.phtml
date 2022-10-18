@@ -1,0 +1,256 @@
+<?php 
+/**
+ * chophel@athang.com -- 2022
+ * View -- of Acl/AclController/permissionAction
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(27,28,29,30)); ?>
+					<div class="card-header">
+						<div class="col-9">
+							<form method="POST">
+								<div class="row">
+									<div class="form-group mb-3 col-lg-4">
+										<label for="module" class="form-label">Module</label>
+										<select id="module" name="module" class="form-select" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['resource']=='-1')?'selected':'';?>>Select Module</option>
+											<?php foreach($modules as $module):?>
+												<option value="<?php echo $module['id']?>" <?php echo ($data['resource']==$module['id'])?'selected':'';?>>
+													<?php echo $module['module'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-4">
+										<label for="process" class="form-label">Process</label>
+										<select id="process" name="process" class="form-select" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['process']=='-1')?'selected':'';?>>All</option>
+											<?php if($data['resource']!='-1'):foreach($this->processObj->get(array('resource'=>$data['resource'])) as $process):?>
+												<option value="<?php echo $process['id']?>" <?php echo ($data['process']==$process['id'])?'selected':'';?>>
+													<?php echo $process['process'];?></option>
+											<?php endforeach;endif;?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-4">
+										<label for="role" class="form-label">Role</label>
+										<select id="role" name="role" class="form-select" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['role']=='-1')?'selected':'';?>>All</option>
+											<?php foreach($this->roleObj->getAllExcept('100') as $role):?>
+												<option value="<?php echo $role['id']?>" <?php echo ($data['role']==$role['id'])?'selected':'';?>>
+													<?php echo $role['role'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+							<?php if($data['resource']!='-1'):?>
+								<?php echo $this->button(2,$data['resource']."_".$data['process']."_".$data['role']);?>
+							<?php endif;?>
+							</div>
+						</div>
+					</div>
+					<?php if($data['resource']!='-1'):?>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap table-striped table-bordered datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>Process</th>
+									<th>Role</th>
+									<th>Permission</th>
+									<?php if($this->button(1)!="" || $this->button(6)!=""):?>
+									<th class='no-sort'>Action</th>
+									<?php endif;?>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $processes = $this->aclObj->getAclPermission($data['resource'],$data['process']);
+							foreach($processes as $process):
+								$roles = $this->aclObj->getRoleAcl($data['resource'],$process['process'],$data['role']);
+								foreach($roles as $role):
+									$processdtls = $this->processObj->get($process['process']);
+									foreach($processdtls as $processdtl);?>
+									<?php 
+										$permission_level =  '0';
+										$roleprocesses = $this->roleprocessObj->get(array('role'=>$role['role'],'process'=>$process['process']));
+										if(sizeof($roleprocesses)==1):
+											foreach($roleprocesses as $roleprocess);
+											$location = ($roleprocess['location']=='1')?'success':'info';
+											$only_if_creator = ($roleprocess['only_if_creator']=='1')?'success':'info';
+											$status = ($roleprocess['status']=='1')?'success':'info';
+											$permission_level =  $roleprocess['permission_level'];
+										else:
+											$location = 'info';
+											$only_if_creator = 'info';
+											$status = 'info';
+											$permission_level =  '';
+										endif;
+									?>
+								<tr>
+									<td width="20%">
+										<strong><?php echo $processdtl['process'];?></strong><br>
+										<?php $permission_array = explode(",", $permission_level);
+											for($i=0;$i<sizeof($permission_array);$i++):
+												echo ($permission_array[$i]>0)?$this->status($permission_array[$i]):'';
+											endfor;
+										?>
+									</td>
+									<td width="20%">
+										<strong><?php echo $this->roleObj->getColumn($role['role'],'role');?></strong><br>
+										<?php if($processdtl['location']=='1'):?><span class="badge bg-<?php echo $location;?>"><strong> L </strong></span><?php endif;?>
+										<?php if($processdtl['only_if_creator']=='1'):?><span class="badge bg-<?php echo $only_if_creator;?>"><strong> C </strong></span><?php endif;?>
+										<?php if($processdtl['status']=='1'):?><span class="badge bg-<?php echo $status;?>"><strong> S </strong></span><?php endif;?>
+									</td>
+									<td width="50%">
+										<div class="row">
+										<?php $actions  = $this->aclObj->getProcessActions($process['process']);
+										foreach($actions as $action):
+											$acl_dtls = $this->aclObj->get(array('resource'=>$data['resource'],'process'=>$process['process'],'process_action'=>$action['action_id']));
+											$title = '';
+											$acl_array = array();
+											foreach($acl_dtls as $acl_dtl):
+												$title .= $acl_dtl['id'].". ".$acl_dtl['menu']." (".$acl_dtl['controller']."/".$acl_dtl['action'].")</br>";
+												array_push($acl_array,$acl_dtl['id']);
+											endforeach;
+											if(sizeof($acl_array)>0):
+											$role_acl_array = $this->aclObj->get(array('id'=>$acl_array,'role'=>$role['role']));
+											$checked = (sizeof($acl_array)==sizeof($role_acl_array))?'checked':'';
+											$checkbox_id = $data['resource']."_".$process['process']."_".$role['role']."_".$action['action_id']."_".$data['process']."_".$data['role'];?>
+											<div class="col-auto">
+												<label class="form-check form-check-inline" for="<?php echo $checkbox_id;?>" data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html="true" title="<?php echo $title;?>">
+													<input class="form-check-input" style="background-color: red" type="checkbox" id="<?php echo $checkbox_id;?>" name="role_acl" data-module="<?php echo $data['resource'];?>" data-process="<?php echo $process['process']?>" data-role="<?php echo $role['role'];?>" data-action="<?php echo $action['action_id'];?>" <?php echo $checked;?> disabled />
+													<span class="form-check-label"><strong><?php echo $action['action'];?></strong></span>
+												</label>
+											</div>
+										<?php endif;endforeach;?>
+										</div>
+									</td>
+									<?php if($this->button(1)!="" || $this->button(6)!=""):?>
+									<td><?php echo $this->button(6, $checkbox_id,'',36);?>
+										<?php echo $this->button(1, $checkbox_id);?></td>
+									<?php else:?><td></td><?php endif;?>	
+								</tr>
+							<?php endforeach;endforeach;?>
+							<?php $aclprocesses = $this->aclObj->getProcessPermission($data['resource'],$data['process']);
+							foreach($aclprocesses as $aclprocess):
+								$aclroles = $this->aclObj->getRolePermission($data['resource'],$aclprocess['process'],$data['role']);
+								foreach($aclroles as $aclrole):
+								$aclprocessdtls = $this->processObj->get($aclprocess['process']);
+									foreach($aclprocessdtls as $aclprocessdtl);?>
+								<?php $aclpermission_level =  '0';
+									$aclroleprocesses = $this->roleprocessObj->get(array('role'=>$aclrole['role'],'process'=>$aclprocess['process']));
+									if(sizeof($aclroleprocesses)==1):
+										foreach($aclroleprocesses as $aclroleprocess);
+										$acllocation = ($aclroleprocess['location']=='1')?'success':'info';
+										$aclonly_if_creator = ($aclroleprocess['only_if_creator']=='1')?'success':'info';
+										$aclstatus = ($aclroleprocess['status']=='1')?'success':'info';
+										$aclpermission_level =  $aclroleprocess['permission_level'];
+									else:
+										$acllocation = 'info';
+										$aclonly_if_creator = 'info';
+										$aclstatus = 'info';
+										$aclpermission_level =  '';
+									endif;
+								?>
+								<tr>
+									<td width="20%">
+										<strong><?php echo $aclprocessdtl['process'];?></strong><br>
+										<?php $aclpermission_array = explode(",", $aclpermission_level);
+										for($i=0;$i<sizeof($aclpermission_array);$i++):
+											echo ($aclpermission_array[$i]>0)?$this->status($aclpermission_array[$i]):'';
+										endfor;
+										?>
+									</td>
+									<td width="20%">
+										<strong><?php echo $this->roleObj->getColumn($aclrole['role'],'role');?></strong><br>
+										<?php if($aclprocessdtl['location']=='1'):?><span class="badge bg-<?php echo $acllocation;?>"><strong> L </strong></span><?php endif;?>
+										<?php if($aclprocessdtl['only_if_creator']=='1'):?><span class="badge bg-<?php echo $aclonly_if_creator;?>"><strong> C </strong></span><?php endif;?>
+										<?php if($aclprocessdtl['status']=='1'):?><span class="badge bg-<?php echo $aclstatus;?>"><strong> S </strong></span><?php endif;?>
+									</td>
+									<td width="50%">
+										<div class="row">
+										<?php $aclactions  = $this->aclObj->getProcessActions($aclprocess['process']);
+										foreach($aclactions as $aclaction):
+											$acl_dtls = $this->aclObj->get(array('resource'=>$data['resource'],'process'=>$aclprocess['process'],'process_action'=>$aclaction['action_id']));
+											$title = '';
+											$acl_array = array();
+											foreach($acl_dtls as $acl_dtl):
+												$title .= $acl_dtl['id'].". ".$acl_dtl['menu']." (".$acl_dtl['controller']."/".$acl_dtl['action'].")</br>";
+												array_push($acl_array,$acl_dtl['id']);
+											endforeach;
+											if(sizeof($acl_array)>0):
+											$role_acl_array = $this->roleaclObj->get(array('acl'=>$acl_array,'role'=>$aclrole['role']));
+											$checked = (sizeof($acl_array)==sizeof($role_acl_array))?'checked':'';
+											$checkbox_id = $data['resource']."_".$aclprocess['process']."_".$aclrole['role']."_".$aclaction['action_id']."_".$data['process']."_".$data['role'];
+											$disabled = ($this->button(5))?'':'disabled';
+											?>
+											<div class="col-auto">
+												<label class="form-check form-check-inline" for="<?php echo $checkbox_id;?>" data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html="true" title="<?php echo $title;?>">
+													<input class="form-check-input" type="checkbox" id="<?php echo $checkbox_id;?>" name="role_acl" data-module="<?php echo $data['resource'];?>" data-process="<?php echo $aclprocess['process']?>" data-role="<?php echo $aclrole['role'];?>" data-action="<?php echo $aclaction['action_id'];?>" <?php echo $checked;?> <?php echo $disabled;?> />
+													<span class="form-check-label"><strong><?php echo $aclaction['action'];?></strong></span>
+												</label>
+											</div>
+										<?php endif;endforeach;?>
+										</div>
+									</td>
+									<?php if($this->button(1)!="" || $this->button(6)!=""):?>
+									<td width="10%"> <?php echo $this->button(6, $checkbox_id,'',35);?>
+										<?php echo $this->button(1, $checkbox_id);?></td>
+									<?php else:?><td></td><?php endif;?>
+								</tr>
+							<?php endforeach;endforeach;?>
+							</tbody>
+						</table>
+					</div>
+					<?php endif;?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#module,#process,#role').change(function(){
+		window.location.href="<?php echo $this->url('acl',array('action'=>'permission'));?>/"+$('#module').val()+"_"+$('#process').val()+"_"+$('#role').val();
+	});
+	$('input[type=checkbox]').each(function(){
+		$(this).bind('change',function(){
+			var element = $(this);
+			var data_module = element.attr('data-module');
+			var data_process = element.attr('data-process');
+			var data_role = element.attr('data-role');
+			var data_action = element.attr('data-action');
+			var data_check = (element.prop('checked'))? 1:0;
+			$.post(
+				"<?php echo $this->url('acl', array('action'=>'permission'));?>",
+				{
+					data_module:data_module, 
+					data_process:data_process,
+					data_role:data_role,
+					data_action:data_action,
+					data_check:data_check
+				},
+				function(data){
+					//console.log(data);
+					if(data.result == ''){
+						alert("Something Went Wrong Please Contact System Administrator.");
+					}
+				},
+				'json'
+			);
+		});
+	});
+});
+</script>

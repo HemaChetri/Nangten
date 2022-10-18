@@ -1,0 +1,59 @@
+<?php 
+/**
+ * View -- of Acl/AclController/editrolelist
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($this->rolesObj->get($this->role_id) as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('acl', array('action' => 'editrolelist','id'=>$page)); ?>"  enctype="multipart/form-data">                  
+    <div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title.": ".$row['role']; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<input type="hidden" id="role_id" name="role_id" value="<?php echo $row['id'];?>" />
+			<div class="mb-3 col-lg-4">  
+				<label class="form-label" for="role">Role</label>
+				<input type="text" class="form-control" name="role" id="role" value="<?php echo $row['role'];?>" required /> 
+			</div>
+			<div class="mb-3 col-lg-8">  
+				<label class="form-label" for="description">Description</label>
+				<input type="text" class="form-control" name="description" id="description" value="<?php echo $row['description'];?>" required /> 
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+	FormValidation.formValidation(document.getElementById('#form'), {
+        fields: {
+            role: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please provide role name.'
+                    }
+                }
+            },
+            description: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please provide description.'
+                    }
+                }
+            },
+        },
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    });
+</script>

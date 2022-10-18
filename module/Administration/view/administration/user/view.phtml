@@ -1,0 +1,104 @@
+<?php 
+/**
+ * View -- of Administration/UserController/viewAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach($users as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(103,109,110),$row['id']); ?>
+					<div class="card-header"></div>
+					<div class="row row-cards">
+              			<div class="col-lg-4">
+						  	<div class="card">
+								<div class="card-body text-center">
+									<div class="mb-3">
+										<?php //echo 'https://www.citizenservices.gov.bt/BtImgWS/ImageServlet?type=PH&cidNo='.$row['cid'];?>
+										<span class="avatar avatar-xl avatar-rounded" style="background-image: url(<?php echo $this->basePath() . '/images/avatar.jpg';?>)"></span>
+									</div>
+									<div class="card-title mb-1"><?php echo $row['name']; ?></div>
+									<div class="text-muted"><?php echo $this->rolesObj->getColumn($row['role'],'role');?></div>
+								</div>
+								<hr style="margin: 1rem 0;">
+								<div class="d-grid gap-2 col-10 mx-auto">
+									<?php echo $this->button(3, $row['id']);?>
+									<?php echo $this->button(3, $row['id'],$row['status']);?>
+								</div>
+								<hr style="margin: 1rem 0;">
+								<div class="card-header">
+									<h3 class="card-title">Additional Information</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5">Joined:</dt>
+										<dd class="col-7"><?php echo $row['created'];?></dd>
+										<dt class="col-5">Last Login:</dt>
+										<dd class="col-7"><?php echo $row['last_login'];?></dd>
+										<dt class="col-5">Last Logout:</dt>
+										<dd class="col-7"><?php echo $row['last_logout'];?></dd>
+										<dt class="col-5">Last Accessed IP:</dt>
+										<dd class="col-7"><?php echo ($row['last_accessed_ip']=='::1')?'localhost-Dev':$row['last_accessed_ip'];?></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-8">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">General information</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5">Name:</dt>
+										<dd class="col-7"><?php echo $row['name'];?></dd>
+										<dt class="col-5">Citizen ID:</dt>
+										<dd class="col-7"><?php echo $row['cid'];?></dd>
+										<dt class="col-5">Date of Birth:</dt>
+										<dd class="col-7"><?php echo $row['dob'];?></dd>
+										<dt class="col-5">User Status:</dt>
+										<dd class="col-7"><?php echo $this->status($row['status']);?></dd>
+									</dl>
+								</div>
+								<div class="card-header">
+									<h3 class="card-title">Contact Information</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5">Email Address:</dt>
+										<dd class="col-7"><?php echo $row['email'];?></dd>
+										<dt class="col-5">Mobile No:</dt>
+										<dd class="col-7">+975-<?php echo $row['mobile'];?></dd>
+									</dl>
+								</div>
+								<div class="card-header">
+									<h3 class="card-title">Permission</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5">Role:</dt>
+										<dd class="col-7"><?php echo $this->rolesObj->getColumn($row['role'],'role');?></dd>
+										<dt class="col-5">Location Type:</dt>
+										<dd class="col-7"><?php echo $this->locationtypeObj->getColumn($row['location_type'],'location_type');?></dd>
+										<dt class="col-5">Location:</dt>
+										<dd class="col-7"><?php echo $this->locationObj->getColumn($row['location'],'location');?></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->						

@@ -1,0 +1,145 @@
+<?php
+/**
+ * View -- of Administration/UserController/changestyle
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($users as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('user', array('action' => 'changepwd')); ?>"  enctype="multipart/form-data" >                  
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-lock"></i> <?php echo $this->title.": ".$row['name']; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<input type="hidden" value="<?php echo $row['id'];?>" name="user_id" id="user_id" />
+			<div class="col-lg-12">  
+				<div class="form-group mb-3">
+					<label for="current_password" class="form-label">Current Password</label>
+					<input type="password" class="form-control" name="current_password" id="current_password" placeholder="Current Password" required />
+				</div>
+				<div class="form-group mb-3">
+					<label for="new_password" class="form-label">New Password</label>
+					<input type="password" class="form-control" name="new_password" id="new_password" placeholder="New Password" required />
+				</div>
+				<div class="cf mb2">
+					<div class="fl w-100">
+						<div class="fl w-25 pa2"></div>
+						<div class="fl w-100 ba b--black-10 h1" style="height: 0.35rem">
+							<div id="passwordMeter" class="h-100"></div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="confirm_password" class="form-label">Confrim New Password</label>
+					<input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required />
+				</div>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-key"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+	$('document').ready(function(){
+		const form = document.getElementById('#form');
+		const passwordMeter = document.getElementById('passwordMeter');
+
+		const randomNumber = function (min, max) {
+			return Math.floor(Math.random() * (max - min + 1) + min);
+		};
+
+		const fv = FormValidation.formValidation(form, {
+			fields: {
+				current_password: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide current password'
+						},
+						remote: {
+							data: {
+								type: 'current_password',
+								user_id : form.querySelector('[name="user_id"]').value,
+							},
+							message: 'Current password does not match, Please try again.',
+							method: 'POST',
+							url: '<?php echo $this->url('user', array('action' => 'checkpwd'));?>',
+						},
+					}
+				},
+				new_password: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide new password'
+						},
+						stringLength: {
+							min: 8,
+							max: 20,
+							message: 'Passowrd must be between 8 to 20 characters.'
+						},
+						different: {
+							compare: function () {
+								return form.querySelector('[name="current_password"]').value;
+							},
+							message: 'The new password should be differnt from current password.',
+						},
+					}
+				},
+				confirm_password: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide current password'
+						},
+						identical: {
+							compare: function () {
+								return form.querySelector('[name="new_password"]').value;
+							},
+							message: 'Confirmation password do not match with new password.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				passwordStrength: new FormValidation.plugins.PasswordStrength({
+					field: 'new_password',
+					message: 'The password is weak',
+					minimalScore: 3,
+					onValidated: function (valid, message, score) {
+						switch (score) {
+							case 0:
+								passwordMeter.style.width = randomNumber(1, 20) + '%';
+								passwordMeter.style.backgroundColor = '#ff4136';
+							case 1:
+								passwordMeter.style.width = randomNumber(20, 40) + '%';
+								passwordMeter.style.backgroundColor = '#ff4136';
+								break;
+							case 2:
+								passwordMeter.style.width = randomNumber(40, 60) + '%';
+								passwordMeter.style.backgroundColor = '#ff4136';
+								break;
+							case 3:
+								passwordMeter.style.width = randomNumber(60, 80) + '%';
+								passwordMeter.style.backgroundColor = '#ffb700';
+								break;
+							case 4:
+								passwordMeter.style.width = '100%';
+								passwordMeter.style.backgroundColor = '#19a974';
+								break;
+							default:
+								break;
+						}
+					},
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		});
+	});
+</script>

@@ -1,0 +1,120 @@
+<?php
+/**
+ * View -- of Administration/LhakhnagController/editlhakhangAction
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($lhakhang as $lhakhangs);?>
+<form id="#form" method="post" action="<?php echo $this->url('lhakhang', array('action' => 'editlhakhang', 'id' => $page)); ?>" enctype="multipart/form-data">
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-circle-plus"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div> <!-- /modal-header -->
+    <div class="modal-body">
+		<div class="row"> 
+		<input type="hidden" name="lhakhang_id" value="<?php $lhakhangs['id'];?>">
+			<div class="form-group mb-3 col-lg-12"> 
+				<label class="form-label" for="GewogId">Gewog</label>
+				<select id="GewogId" name="GewogId" class="form-select" data-placeholder="Select">
+					<?php foreach($gewogs as $gewog):?>
+						<option value="<?php echo $gewog['id']?>" <?php echo ($lhakhangs['GewogId']==$gewog['id'])?'selected':'';?>> 
+							<?php echo $gewog['GewogNameEn'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label for="LhakhangNameDz" class="form-label">Lhakhang Name(Dzongkha)</label>
+				<input class="form-control" type="text" name="LhakhangNameDz" id="LhakhangNameDz" value="<?php echo $lhakhangs['LhakhangNameDz'];?>" placeholder="Lhakhanh Name Dzongkha" required />
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label for="LhakhangNameEn" class="form-label">Lhakhang Name(English)</label>
+				<input class="form-control" type="text" name="LhakhangNameEn" id="LhakhangNameEn" value="<?php echo $lhakhangs['LhakhangNameEn'];?>"placeholder="Lhakhanh Name English" required />
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label for="LhakhangOwnerDz" class="form-label">Owner Name(Dzongkha)</label>
+				<input class="form-control" type="text" name="LhakhangOwnerDz" id="LhakhangOwnerDz" value="<?php echo $lhakhangs['LhakhangOwnerDz'];?>" placeholder="Owner Name(Dzongkha)" required />
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label for="LhakhangOwnerEn" class="form-label">Owner Name(English)</label>
+				<input class="form-control" type="text" name="LhakhangOwnerEn" id="LhakhangOwnerEn" value="<?php echo $lhakhangs['LhakhangOwnerEn'];?>" placeholder="Owner Name(English)" required />
+			</div>
+			<div  class="form-group mb-3 col-lg-4">
+				<label for="status" class="form-label">Status</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="1" <?php echo ($lhakhangs['status']=='1')?"checked":"";?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="0" <?php echo ($lhakhangs['status']=='0')?"checked":"";?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+    </div> <!-- /modal-body -->
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>  
+</form>
+<script>
+$(function(){
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			GewogId: {
+				validators: {
+					notEmpty: {
+						message: 'Please select Gewog.'
+					}
+				}
+			},
+			LhakhangNameDz: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Lhakhag Name.'
+					}
+				}
+			},
+			LhakhangNameEn: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Lhakhag Name.'
+					}
+				}
+			},
+			LhakhangOwnerEn: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Owner Name.'
+					}
+				}
+			},
+			LhakhangOwnerDz: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Owner Name.'
+					}
+				}
+			},
+		},
+		plugins: {
+			trigger: new FormValidation.plugins.Trigger(),
+			bootstrap5: new FormValidation.plugins.Bootstrap5({
+				rowSelector: '.mb-3',
+			}),
+			submitButton: new FormValidation.plugins.SubmitButton(),
+			defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+		},
+	}).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+});
+</script>

@@ -1,0 +1,113 @@
+<?php 
+/**
+ * View -- of Administration/UserController/notificationAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach ($users as $user);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(103,109,110),$user['id']); ?>
+					<div class="card-header"></div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Notification</th>
+									<th>Priority</th>
+									<th>Flag</th>
+									<th class="no-print">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=1+(($page-1)*25); foreach($paginator as $row):?>
+							<tr>
+								<td><?php echo $i++; ?></td>
+								<td><?php echo $row['desc']; ?></td>
+								<td><span class="status-dot status-dot-animated <?php echo ($row['priority']==1)?'bg-red':'bg-green';?> d-block"></span></td>
+								<td><?php echo ($row['flag']==0)?"<i class='icon ti ti-flag text-success'></i>":"<i class='icon ti ti-check text-muted'></i>"; ?></td>
+								<td>
+									<span data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View Notification">
+									<a class="btn btn-primary btn-sm btn-icon btn-sm" href="<?php echo $this->url($row['route'], array('action'=>$row['action'], 'id'=>$row['key'].'_'.$row['id']));?>">
+										<i class="icon-sm ti ti-eye"></i> 
+									</a></span>
+								</td>
+							</tr>
+							<?php endforeach;?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','adm_pagination.phtml', 
+							array('route' => 'user/paginator','action'=>'useractivity','id'=>$user['id']));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+</script>

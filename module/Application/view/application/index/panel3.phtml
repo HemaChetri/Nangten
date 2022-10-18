@@ -1,0 +1,286 @@
+<?php
+/**
+ * View -- of Application/IndexController/panel3Action
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?>
+<div class="container-xl">
+	<!-- Page title -->
+	<div class="page-header d-print-none">
+		<div class="row align-items-center">
+			<div class="col">
+				<!-- Page pre-title -->
+                <div class="page-pretitle">Overview</div>
+                <h2 class="page-title">Dashboard</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-deck row-cards">
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Nangtens in Each Dzongkhag</h3>
+						<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Lhakhangs in Each Dzongkhag</h3>
+						<div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Nangten Group Composition</h3>
+						<div id="chartContainer3" style="height: 300px; width: 100%;"></div>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Categorization of Nangten</h3>
+						<div id="chartContainer4" style="height: 300px; width: 100%;"></div>
+					</div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php 
+$dataPoints = array();
+$dataPoints2 = array();
+$dataPoints3 = array();
+$dataPoints4 = array();
+$dataPoints5 = array();
+$dataPoints6 = array();
+foreach($this->dzoObj->get(array('status'=>'1')) as $nangten){
+   	$group1 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>2));
+ 	array_push($dataPoints, array("y"=>$group1,"label"=>$nangten['DzongkhagNameEn'])); 
+  	$group2 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>8));
+   	array_push($dataPoints2, array("y"=>$group2,"label"=>$nangten['DzongkhagNameEn'])); 
+	$group3 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>9));
+   	array_push($dataPoints3, array("y"=>$group3,"label"=>$nangten['DzongkhagNameEn']));
+	$group4 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>10));
+   	array_push($dataPoints4, array("y"=>$group4,"label"=>$nangten['DzongkhagNameEn']));
+	$group5 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>11));
+   	array_push($dataPoints5, array("y"=>$group5,"label"=>$nangten['DzongkhagNameEn']));
+	$group6 = $this->nangtenObj->getCount('DzongkhagId',array('DzongkhagId'=>$nangten['id'],'TenGroupId'=>12));
+   	array_push($dataPoints6, array("y"=>$group6,"label"=>$nangten['DzongkhagNameEn']));
+}
+/** Graph 2 */
+$dataPointsGraph2 = array();
+foreach($this->dzoObj->get(array('status'=>'1')) as $district){
+	$gewogs_in_district = $this->gewogObj->get(array('DzongkhagId'=>$district['id']));
+	$gewog_array = [];
+	foreach($gewogs_in_district as $gewogs_in_each_district){
+		array_push($gewog_array, $gewogs_in_each_district['id']);
+	}
+   	$lhakhang_count = $this->lhakhangObj->getCount(array('GewogId'=>$gewog_array));
+ 	array_push($dataPointsGraph2, array("y"=>$lhakhang_count,"label"=>$district['DzongkhagNameEn']));
+}
+
+
+$dataPointsGraph3 = array();
+
+foreach($this->nangtenObj->getDistinct('TenGroupId') as $nangten){
+   $group = $this->nangtenObj->getCount('TenGroupId',array('TenGroupId'=>$nangten));
+   $dzongkhag= $this->groupObj->getColumn($nangten, 'GroupNameEn');
+  array_push($dataPointsGraph3, array("y"=>$group,"label"=>$dzongkhag)); 
+}
+
+$dataPointsGraph4 = array();
+
+foreach($this->groupObj->getDistinct('id',array('status'=>1)) as $nangten){
+   $group = $this->categoryObj->getCount('category',array('group'=>$nangten));
+   $categorys= $this->groupObj->getColumn($nangten, 'GroupNameEn');
+  array_push($dataPointsGraph4, array("y"=>$group,"label"=>$categorys)); 
+}
+$dataPointsGraph5 = array();
+
+foreach($this->groupObj->getDistinct('id',array('status'=>1)) as $group){
+   $group = $this->subcategoryObj->getCount('sub_category',array('group'=>$group));
+   $subcat= $this->groupObj->getColumn($group, 'GroupNameEn');
+  array_push($dataPointsGraph5, array("y"=>$group,"label"=>$subcat)); 
+}
+?>
+<script>
+window.onload = function () {
+
+	var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	colorSet: "rusticColorSet",
+	axisX: {
+		interval: 1,
+		intervalType: "year",
+		valueFormatString: "YYYY"
+	},
+	axisY: {
+		suffix: ""
+	},
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		reversed: true,
+		verticalAlign: "center",
+		horizontalAlign: "right"
+	},
+	data: [{
+		type: "stackedColumn",
+		name: "Ritual Objects",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+	}, 
+	{
+		type: "stackedColumn",
+		name: "Statue",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		type: "stackedColumn",
+		name: "Stupa",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints3, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		type: "stackedColumn",
+		name: "Pechha",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints3, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		type: "stackedColumn",
+		name: "Thangka",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints3, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		type: "stackedColumn",
+		name: "Debri",
+		showInLegend: true,
+		xValueFormatString: "",
+		yValueFormatString: "",
+		dataPoints: <?php echo json_encode($dataPoints3, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+var chart2 = new CanvasJS.Chart("chartContainer2", {
+	animationEnabled: true,
+	theme: "light2",
+	axisY: {
+		title: "No of Lhakhangs"
+	},
+	axisX:{
+		interval: 1
+	},
+	data: [{        
+		type: "bar",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "District",
+		dataPoints: <?php echo json_encode($dataPointsGraph2, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+var chart3 = new CanvasJS.Chart("chartContainer3", {
+	animationEnabled: true,
+	theme: "light2",
+	data: [{
+		type: "pie",
+		startAngle: 240,
+		yValueFormatString: "",
+		indexLabel: "",
+		dataPoints: <?php echo json_encode($dataPointsGraph3, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+var chart4 = new CanvasJS.Chart("chartContainer4", {
+	animationEnabled: true,
+	axisY: {
+		includeZero: true
+	},
+	legend: {
+		cursor:"pointer",
+		itemclick : toggleDataSeries
+	},
+	toolTip: {
+		shared: true,
+		content: toolTipFormatter
+	},
+	data: [{
+		type: "bar",
+		showInLegend: true,
+		name: "Category",
+		color: "gold",
+		dataPoints: <?php echo json_encode($dataPointsGraph4, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		type: "bar",
+		showInLegend: true,
+		name: "Sub-Category",
+		color: "silver",
+		dataPoints: <?php echo json_encode($dataPointsGraph5, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+chart.render();
+chart2.render();
+chart3.render();
+chart4.render();
+function toolTipContent(e) {
+	var str = "";
+	var total = 0;
+	var str2, str3;
+	for (var i = 0; i < e.entries.length; i++){
+		var  str1 = "<span style= \"color:"+e.entries[i].dataSeries.color + "\"> "+e.entries[i].dataSeries.name+"</span>: $<strong>"+e.entries[i].dataPoint.y+"</strong>bn<br/>";
+		total = e.entries[i].dataPoint.y + total;
+		str = str.concat(str1);
+	}
+	str2 = "<span style = \"color:DodgerBlue;\"><strong>"+(e.entries[0].dataPoint.x).getFullYear()+"</strong></span><br/>";
+	total = Math.round(total * 100) / 100;
+	str3 = "<span style = \"color:Tomato\">Total:</span><strong> $"+total+"</strong>bn<br/>";
+	return (str2.concat(str)).concat(str3);
+}
+
+function toolTipFormatter(e) {
+	var str = "";
+	var total = 0 ;
+	var str3;
+	var str2 ;
+	for (var i = 0; i < e.entries.length; i++){
+		var str1 = "<span style= \"color:"+e.entries[i].dataSeries.color + "\">" + e.entries[i].dataSeries.name + "</span>: <strong>"+  e.entries[i].dataPoint.y + "</strong> <br/>" ;
+		total = e.entries[i].dataPoint.y + total;
+		str = str.concat(str1);
+	}
+	str2 = "<strong>" + e.entries[0].dataPoint.label + "</strong> <br/>";
+	str3 = "<span style = \"color:Tomato\">Total: </span><strong>" + total + "</strong><br/>";
+	return (str2.concat(str)).concat(str3);
+}
+
+function toggleDataSeries(e) {
+	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	}
+	else {
+		e.dataSeries.visible = true;
+	}
+	chart4.render();
+}
+}
+</script>

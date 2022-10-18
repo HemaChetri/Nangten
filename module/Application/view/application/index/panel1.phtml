@@ -1,0 +1,50 @@
+<?php
+/**
+ * View -- of Application/IndexController/panel1Action
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?>
+<div class="container-xl">
+	<!-- Page title -->
+	<div class="page-header d-print-none">
+		<div class="row align-items-center">
+			<div class="col">
+				<!-- Page pre-title -->
+                <div class="page-pretitle">Overview</div>
+                <h2 class="page-title">Dashboard</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards mt-1">
+			<?php foreach($this->menus as $menu):?>
+			<div class="col-sm-4">
+				<div class="card card-sm">
+					<div class="card-body">
+						<a href="<?php echo $this->url($menu['route'],array('action'=>$menu['action']));?>" style="text-decoration:none">
+                        <div class="row align-items-center">
+                          	<div class="col-auto">
+								<span class="bg-blue text-white avatar">
+									<i class="icon <?php echo $menu['icon'];?>"></i>
+								</span>
+                          	</div>
+                          	<div class="col">
+                            	<div class="font-weight-medium">
+									<?php echo $menu['menu'];?>
+                            	</div>
+								<div class="text-muted">
+									<?php echo $menu['description'];?>
+								</div>
+                          	</div>
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+			<?php endforeach;?>
+		</div>
+	</div>
+</div>

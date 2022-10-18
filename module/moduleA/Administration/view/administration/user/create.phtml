@@ -1,0 +1,282 @@
+<?php 
+/**
+ * View -- of Administration/UserController/createAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title"><i class="icon ti ti-user-plus"></i><?php echo $this->title;?></h3>
+					</div>
+					<form id="#form" method="post" action="<?php echo $this->url('user', array('action' => 'create')); ?>" enctype="multipart/form-data" >
+						<div class="card-body">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="cid" class="form-label">Citizen ID.</label>
+									<div class="input-group mb-2">
+										<input class="form-control" placeholder="Citizen ID" id="cid" name="cid" value="" required >
+										<span class="input-group-text" id="panel"><i class="icon ti ti-user"></i></span>
+									</div>
+									<div id="message1"></div>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="dob" class="form-label">Date of Birth:</label>
+									<div class="input-group mb-2">
+										<input class="form-control " placeholder="Select a date" id="dob" name="dob" value="" autocomplete="off"/>
+										<span class="input-group-text"><i class="icon ti ti-calendar"></i></span>
+									</div>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="name" class="form-label">Full Name</label>
+									<input class="form-control" placeholder="Full name" id="name" name="name" value="" required >
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label for="email" class="form-label">Email</label>
+									<input class="form-control" placeholder="Email" name="email" value="" autocomplete="off" required >
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="mobile" class="form-label">Mobile No.</label>
+									<div class="input-group mb-2">
+										<span class="input-group-text">+975</span>
+										<input type="text" class="form-control" placeholder="Mobile No." name="mobile" value="" autocomplete="off" required >
+									</div>
+								</div>		
+							</div>
+							<h5><strong><i>Permissions</i></strong></h5> <hr style="border-top:1px solid #c1bdbd;margin-top:10px;margin-bottom:10px;">
+							<div class="row">
+								<div class="form-group mb-3 col-lg-4">
+									<label class="form-label" for="role">Role</label>
+									<select class="form-select" name="role" id="role" data-placeholder="Select" >
+										<option value=''></option>
+										<?php foreach($roles as $role):?>
+											<option value="<?php echo $role['id'];?>">
+												<?php echo $role['role'];?>
+											</option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="location_type" class="form-label">Location Type</label>
+									<select id="location_type" name="location_type" class="form-select" data-placeholder="Select" required >
+										<option value=''></option>	
+										<?php foreach($locationtypes as $locationtype):?>
+										<option value="<?php echo $locationtype['id'];?>">
+											<?php echo $locationtype['location_type'];?>
+										</option>
+										<?php endforeach;?>
+									</select>
+								</div>
+								<div class="form-group mb-3 col-lg-4">
+									<label for="location" class="form-label">Location</label>
+									<select id="location" name="location" class="form-select" data-placeholder="Select" required >
+										<option value=''></option>	
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<button type="submit" class="btn btn-success"><span class="icon ti ti-check"></span> Save</button>
+							<a class="btn btn-warning" onclick="javascript:history.back();"><span class="icon ti ti-x"></span> Cancel </a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	const picker = new Litepicker({ 
+		element: document.getElementById('dob'), 
+		buttonText: {
+			previousMonth: "<i class='icon ti ti-chevron-left'></i>",
+			nextMonth: "<i class='icon ti ti-chevron-right'></i>",
+		},
+		dropdowns: {"minYear":1960,"maxYear":null,"months":true,"years":true},
+	});
+	$(function(){
+		$('select#location_type').on('change', function() {
+			$.post(
+				"<?php echo $this->url('user', ['action'=>'getlocationviatype']); ?>",
+				{
+					location_type: $(this).val()
+				},
+				function(data){
+					$('select#location').html(data.location);
+					$('select#location').trigger('chosen:updated');
+				},'json'
+			);
+		});
+		const fv = FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				cid: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide citizen ID.'
+						},
+						integer: {
+	                        message: 'Please provide numeric values.'
+	                    },
+						remote: {
+							data: {
+								type:'cid',
+							},
+							message: 'This cid has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						},
+						stringLength: {
+							min: 11,
+							max: 11,
+							message: 'The cid no. must be 11 digits.'
+						},
+					}
+				},
+				dob: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide date of birth.'
+						},
+					}
+				},
+				name: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide full name.'
+						},
+						regexp: {
+	                        regexp: /^[a-zA-z' ']+$/i,
+	                        message: 'Full name must be of alphabetical characters and spaces only.'
+	                    }
+					}
+				},
+				email: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide email address.'
+						},
+						emailAddress: {
+	                        message: 'Please provide valid email address.'
+	                    },
+						remote: {
+							data: {
+								type:'email',
+							},
+							message: 'This email has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						}
+					}
+				},
+				mobile: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide mobile number'
+						},
+						digits: {
+	                        message: 'Please provide valid mobile number'
+	                    },
+						remote: {
+							data: {
+								type:'mobile',
+							},
+							message: 'This mobile number has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						},
+	                    stringLength: {
+							min: 8,
+							max: 8,
+							message: 'The mobile no. must be 8 digits.'
+						},
+					}
+				},
+				role: {
+					validators: {
+						notEmpty: {
+							message: 'Please select user role.'
+						}
+					}
+				},
+				location_type: {
+					validators: {
+						notEmpty: {
+							message: 'Please select PIU type.'
+						}
+					}
+				},
+				location: {
+					validators: {
+						notEmpty: {
+							message: 'Please select PIU.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		}).on('core.element.validated', function (e) {
+			if (e.valid) {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+			} else {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+			}
+		});
+		$('form select').chosen().change(function () {
+			fv.revalidateField($(this).attr('name'));
+		});
+		picker.on('selected', function (e) {
+			fv.revalidateField(picker.options.element.name);
+		});
+		$('#cid').on('change', function(){
+			fv.validateField('cid').then(function(status) {
+				if(status == 'Valid'){
+					$.when(
+						$('span#panel').html("<div class='spinner-border spinner-border-sm text-red' role='status'></div>"),
+						$('#message1').empty(),
+						$('#name').val(""),
+						$('input#dob').val(""),
+					).done(function(){
+						$.when(
+							$.post(
+								"<?php echo $this->url('user', array('action' => 'getuserciddtl')); ?>",
+								{
+									cid: $('#cid').val(),
+								},
+								function(data,status,xhr){
+									if(data.cid > 0){ 
+										$('#message1').empty();
+										$('#name').val(data.name);
+										$('input#dob').val(data.dob);
+									}else{ 
+										$('#message1').html(data.message);
+										$('#name').val("");
+										$('input#dob').val("");
+									}
+								},
+								'json'
+							)
+						).done(function(){
+							$('span#panel').html("<i class='icon ti ti-user'></i>");
+						});
+					});
+					
+				}
+			});
+		});
+	});
+</script>

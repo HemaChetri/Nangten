@@ -1,0 +1,72 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ * chophel@athang.com
+ */
+?>
+<?= $this->doctype() ?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('Nangten')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0, viewport-fit=cover')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'], 'PREPEND')
+			->prependStylesheet($this->basePath() . '/css/athang.css')
+			->prependStylesheet($this->basePath() . '/leaflet.fullscreen/leaflet.fullscreen.css')
+			->prependStylesheet($this->basePath() . '/leaflet/leaflet.css')
+			->prependStylesheet($this->basePath() . '/css/formValidation.min.css')
+			->prependStylesheet($this->basePath() . '/datatables/datatables.min.css')
+			->prependStylesheet($this->basePath() . '/css/component-chosen.min.css')
+			->prependStylesheet($this->basePath() . '/css/athang-vendors.min.css')
+			->prependStylesheet($this->basePath() . '/css/athang-theme.min.css')
+			->prependStylesheet($this->basePath() . '/css/tabler-icons.min.css');
+        ?>
+
+        <!-- Scripts -->
+        <?= $this->headScript()
+			->prependFile($this->basePath() . '/js/athang.js')
+			->prependFile($this->basePath() . '/js/print.js')
+			->prependFile($this->basePath() . '/js/canvasjs.min.js')
+			->prependFile($this->basePath() . '/leaflet.fullscreen/Leaflet.fullscreen.min.js')
+			->prependFile($this->basePath() . '/leaflet/leaflet.js')
+			->prependFile($this->basePath() . '/js/litepicker.js')
+			->prependFile($this->basePath() . '/js/PasswordStrength.min.js')
+			->prependFile($this->basePath() . '/js/FormValidationBootstrap5.min.js')
+			->prependFile($this->basePath() . '/js/FormValidation.min.js')
+			->prependFile($this->basePath() . '/zxcvbnv4.4.2/zxcvbn.js')
+			->prependFile($this->basePath() . '/datatables/datatables.min.js')
+			->prependFile($this->basePath() . '/js/chosen.jquery.min.js')
+			->prependFile($this->basePath() . '/js/athang-theme.min.js')
+			->prependFile($this->basePath() . '/js/jquery.min.js'); 
+        ?>
+    </head>
+   	<body class="<?php echo ($this->identity())?'':'border-top-wide border-primary d-flex flex-column';?>">
+	   	<?php if($this->identity()): ?>	
+		<div class="page">
+			<div class="sticky-top">
+				<!-- top header -->
+				<?php echo $this->partial('partial/navbar-top.phtml'); ?>
+				<!-- top menu -->
+				<?php echo $this->partial('partial/navbar-side.phtml'); ?>
+		   	</div>
+			<!-- breadcrumb -->
+			<?php echo $this->partial('partial/breadcrumb.phtml'); ?>
+			<div class="page-wrapper">
+		<?php endif; ?>
+				<?php echo $this->content; ?>
+				<?php echo $this->flashmessage();?>
+		<?php if($this->identity()): ?>
+				<!-- bottom footer -->
+				<?php echo $this->partial('partial/navbar-bottom.phtml'); ?>
+			</div>
+		</div>
+		<?php endif; ?>
+		<button type="button" class="btn btn-primary btn-pill btn-icon" id="btn-back-to-top"><i class="icon ti ti-arrow-bar-to-up"></i></button>
+    </body>
+</html>

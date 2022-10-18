@@ -1,0 +1,57 @@
+<?php 
+/**
+ * View -- of Acl/AclController/addrolelist
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<form id="#form" method="post" action="<?php echo $this->url('acl', array('action' => 'addrolelist','id'=>$page)); ?>" enctype="multipart/form-data">                  
+    <div class="modal-header">
+        <h4 class="modal-title"> <i class="icon ti ti-circle-plus"></i><?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+            <div class="mb-3 col-lg-4">
+				<label class="form-label">Role</label>
+				<input type="text" class="form-control" name="role" id="role" required />
+            </div>
+            <div class="mb-3 col-lg-8">
+				<label class="form-label">Description</label>
+				<input type="text" class="form-control" name="description" id="description" required />
+            </div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+    FormValidation.formValidation(document.getElementById('#form'), {
+        fields: {
+            role: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please provide role name.'
+                    }
+                }
+            },
+            description: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please provide description.'
+                    }
+                }
+            },
+        },
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    });
+</script>

@@ -1,0 +1,159 @@
+<?php
+/**
+ * View -- of Administration/LhakhangController/LhakhangsectionAction
+ * chophel@athang.com
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<?php echo $this->tabs_helper(array(133,136)); ?>
+					<div class="card-header">
+						<div class="col-9">
+						<form method="POST" action="<?php echo $this->url('lhakhang', array('action' => 'lhakhangsection','id'=>$page)); ?>"  enctype="multipart/form-data" >    
+							<div class="row">
+									<div class="form-group mb-3 col-lg-6">
+										<label for="gewog" class="form-label">Gewog</label>
+										<select class="form-control" id="gewog" name="gewog" data-placeholder="Select" onchange='this.form.submit()' >
+											<option value="-1" <?php echo ($data['gewog'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($gewog as $gewogs):
+												$selected = ($data['gewog']==$gewogs['id'])?'selected':'';?>
+												<option value="<?php echo $gewogs['id']; ?>" <?php echo $selected?>>
+												<?php echo $gewogs['GewogNameDz']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-6">
+										<label for="lhakhang" class="form-label">Lhakhang</label>
+										<select class="form-control" id="lhakhang" name="lhakhang" data-placeholder="Select" onchange='this.form.submit()' >
+											<option value="-1" <?php echo ($data['lhakhang'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($lhakhang as $lhakhangs):
+												$selected = ($data['lhakhang']==$lhakhangs['id'])?'selected':'';?>
+												<option value="<?php echo $lhakhangs['id']; ?>" <?php echo $selected?>>
+												<?php echo $lhakhangs['LhakhangOwnerDz']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+								<?php echo $this->button(2,$page);?>
+							</div>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Lhakhang Section</th>
+									<th>Lhakhang</th>
+									<th>Gewog</th>
+									<th>Status</th>
+									<?php if($this->button(1)!=""):?>
+										<th class="no-sort no-printpdf">Action</th>
+									<?php endif;?>	
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+								$i=1;
+								foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td class="fw-bold fs-2"><?php echo $row['SectionNameDz']; ?></td>
+									<td class="fs-2"><?php echo $this->lhakhangObj->getColumn($row['LhakhangId'],'LhakhangNameDz'); ?></td>
+									<td class="fs-2"><?php echo $this->gewogObj->getColumn($row['GewogId'],'GewogNameDz'); ?></td>
+									<td><?php echo $this->status($row['status']); ?></td>
+									<?php if($this->button(1)!=""):?>
+										<td><?php echo $this->button(1, $row['id'].'_'.$page);?></td>
+									<?php endif;?>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','adm_pagination.phtml', 
+							array('route' => 'lhakhang/paginator','action'=>'lhakhangsection','id'=>$data['gewog']."_".$data['lhakhang']));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

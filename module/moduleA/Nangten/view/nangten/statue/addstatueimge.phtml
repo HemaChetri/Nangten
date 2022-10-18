@@ -1,0 +1,296 @@
+<?php 
+/**
+ * View -- of Nangten/NangtenController/addstatueimageAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach($statue as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title"><i class="icon ti ti-user-plus"></i><?php echo $this->title;?></h3>
+					</div>
+					<form id="#form" method="post" action="<?php echo $this->url('statue', array('action' => 'addstatueimge','id' => $row['id'])); ?>" enctype="multipart/form-data">                  
+						<div class="modal-header">
+							<h4 class="modal-title"> <i class="icon ti ti-edit"></i><?php echo $this->title; ?></h4>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>  <!-- /modal-header -->
+						<input type="hidden" name="statue_id" id="statue_id" value="<?php echo $row['id'];?>">
+						<div class="modal-body">   
+							<div class="form-group col-lg-6">
+								<label for="recipient-name" class="control-label"> Select Statue Image:</label>
+								<input type="file" name="image-file" id="uploadfile" >
+							</div>
+						</div> <!-- /modal-body -->    
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+							<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('select#category').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("statue", array("action" => "getsubcategory")); ?>",
+            {
+                categoryId: $(this).val(),
+            },
+            function(data){
+                $("select#subcategory").html(data.subcategoryValue);
+                $('select#subcategory').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#DzongkhagId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("statue", array("action" => "getgewog")); ?>",
+            {
+                dzongkhagId: $(this).val(),
+            },
+            function(data){
+                $("select#GewogId").html(data.gewogValue);
+                $('select#GewogId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("statue", array("action" => "getvillage")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#VillageId").html(data.villageValue);
+                $('select#VillageId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("statue", array("action" => "getvillage")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#VillageId").html(data.villageValue);
+                $('select#VillageId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("statue", array("action" => "getvillage")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#LhakhangId").html(data.lhakhangValue);
+                $('select#LhakhangId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	/*$('select#LhakhangId').on('change', function(){
+	$.post(
+		 "<?php //echo $this->url("nangten", array("action" => "getsection")); ?>",
+            {
+                lhaId: $(this).val(),
+            },
+            function(data){
+                $("select#LhaSectionId").html(data.sectionValue);
+                $('select#LhaSectionId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });*/
+		const fv = FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				cid: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide citizen ID.'
+						},
+						integer: {
+	                        message: 'Please provide numeric values.'
+	                    },
+						remote: {
+							data: {
+								type:'cid',
+							},
+							message: 'This cid has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						},
+						stringLength: {
+							min: 11,
+							max: 11,
+							message: 'The cid no. must be 11 digits.'
+						},
+					}
+				},
+				dob: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide date of birth.'
+						},
+					}
+				},
+				name: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide full name.'
+						},
+						regexp: {
+	                        regexp: /^[a-zA-z' ']+$/i,
+	                        message: 'Full name must be of alphabetical characters and spaces only.'
+	                    }
+					}
+				},
+				email: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide email address.'
+						},
+						emailAddress: {
+	                        message: 'Please provide valid email address.'
+	                    },
+						remote: {
+							data: {
+								type:'email',
+							},
+							message: 'This email has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						}
+					}
+				},
+				mobile: {
+					validators: {
+						notEmpty: {
+							message: 'Please provide mobile number'
+						},
+						digits: {
+	                        message: 'Please provide valid mobile number'
+	                    },
+						remote: {
+							data: {
+								type:'mobile',
+							},
+							message: 'This mobile number has been already used.',
+							method: 'POST',
+							url: "<?php echo $this->url('user', array('action' => 'getvalidfield'));?>",
+						},
+	                    stringLength: {
+							min: 8,
+							max: 8,
+							message: 'The mobile no. must be 8 digits.'
+						},
+					}
+				},
+				role: {
+					validators: {
+						notEmpty: {
+							message: 'Please select user role.'
+						}
+					}
+				},
+				location_type: {
+					validators: {
+						notEmpty: {
+							message: 'Please select PIU type.'
+						}
+					}
+				},
+				location: {
+					validators: {
+						notEmpty: {
+							message: 'Please select PIU.'
+						}
+					}
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		}).on('core.element.validated', function (e) {
+			if (e.valid) {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+			} else {
+				$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+				$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+			}
+		});
+		$('form select').chosen().change(function () {
+			fv.revalidateField($(this).attr('name'));
+		});
+		picker.on('selected', function (e) {
+			fv.revalidateField(picker.options.element.name);
+		});
+		$('#cid').on('change', function(){
+			fv.validateField('cid').then(function(status) {
+				if(status == 'Valid'){
+					$.when(
+						$('span#panel').html("<div class='spinner-border spinner-border-sm text-red' role='status'></div>"),
+						$('#message1').empty(),
+						$('#name').val(""),
+						$('input#dob').val(""),
+					).done(function(){
+						$.when(
+							$.post(
+								"<?php echo $this->url('user', array('action' => 'getuserciddtl')); ?>",
+								{
+									cid: $('#cid').val(),
+								},
+								function(data,status,xhr){
+									if(data.cid > 0){ 
+										$('#message1').empty();
+										$('#name').val(data.name);
+										$('input#dob').val(data.dob);
+									}else{ 
+										$('#message1').html(data.message);
+										$('#name').val("");
+										$('input#dob').val("");
+									}
+								},
+								'json'
+							)
+						).done(function(){
+							$('span#panel').html("<i class='icon ti ti-user'></i>");
+						});
+					});
+					
+				}
+			});
+		});
+	});
+	$('#uploadfile').ace_file_input({
+			no_file:'No File ...',
+			btn_choose:'Choose',
+			btn_change:'Change',
+			droppable:false,
+			onchange:null,
+			thumbnail: 'small',
+			whitelist:'doc|docx|pdf|jpg',
+			//blacklist:'exe|php'
+			//onchange:''
+		}); 
+</script>

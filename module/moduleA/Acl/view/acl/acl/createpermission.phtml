@@ -1,0 +1,123 @@
+<?php 
+/**
+ * View -- of Acl/AclController/createpermission
+ * chophel@athang.com -- 2020
+ */
+$this->headTitle($this->title);
+?>
+<form id="#form" method="post" action="<?php echo $this->url('acl', array('action' => 'createpermission','id'=>$this->id)); ?>"  enctype="multipart/form-data" >                  
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-circle-plus"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<div class="form-group mb-3 col-lg-12">  
+				<label for="module" class="form-label">Module</label>
+				<select id="module" name="module" class="form-select" data-placeholder="Select" <?php echo ($data['resource']!='-1')?'disabled':'';?>>
+					<option value="-1" <?php echo ($data['resource']=='-1')?'selected':'';?>>Select Module</option>
+					<?php foreach($modules as $module):?>
+						<option value="<?php echo $module['id']?>" <?php echo ($data['resource']==$module['id'])?'selected':'';?>>
+							<?php echo $module['module'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-12">
+				<label for="process" class="form-label">Process</label>
+				<select id="process" name="process" class="form-select" data-placeholder="Select" <?php echo ($data['process']!='-1')?'disabled':'';?>>
+					<option value=""></option>	
+					<?php if($data['resource']!='-1'):foreach($this->processObj->get(array('resource'=>$data['resource'])) as $process):?>
+						<option value="<?php echo $process['id']?>" <?php echo ($data['process']==$process['id'])?'selected':'';?>>
+							<?php echo $process['process'];?></option>
+					<?php endforeach;endif;?>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-12">
+				<label for="role" class="form-label">Role</label>
+				<select id="role" name="role" class="form-select" data-placeholder="Select" <?php echo ($data['role']!='-1')?'disabled':'';?>>
+					<option value=""></option>
+					<?php foreach($this->roleObj->getAllExcept('100') as $role):?>
+						<option value="<?php echo $role['id']?>" <?php echo ($data['role']==$role['id'])?'selected':'';?>>
+							<?php echo $role['role'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<input type="hidden" name="module_id" id="module_id" value="<?php echo $data['resource'];?>" />
+		<input type="hidden" name="process_id" id="process_id" value="<?php echo $data['process'];?>" />
+		<input type="hidden" name="role_id" id="role_id" value="<?php echo $data['role'];?>" />
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	$('select#module').on('change',function(){
+		$('input#module_id').val($(this).val());
+	});
+	$('select#process').on('change',function(){
+		$('input#process_id').val($(this).val());
+	});
+	$('select#role').on('change',function(){
+		$('input#role_id').val($(this).val());
+	});
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+        fields: {
+			module: {
+				validators: {
+					notEmpty: {
+						message: 'Please select module.'
+					}
+				}
+			},
+			process: {
+				validators: {
+					notEmpty: {
+						message: 'Please select process.'
+					}
+				}
+			},
+			role: {
+				validators: {
+					notEmpty: {
+						message: 'Please select role.'
+					}
+				}
+			},
+		},
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    }).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+	$('form').formValidation({
+		framework: 'bootstrap',
+		excluded: ':disabled',
+		message: 'This value is not valid',
+		
+		
+	});
+});
+</script>
+

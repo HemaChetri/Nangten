@@ -1,0 +1,99 @@
+<?php
+/**
+ * Layout --- Side Navbar
+ * chophel@athang.com
+ */
+?>
+<?php 
+	$getRoute = $this->getroute_helper()->getMatchedRouteName();
+	$getAction = $this->getroute_helper()->getParam('action');
+	$arr = explode('/', $getRoute);
+	$getRoute = $arr[0];
+	$getResource = $this->getresource_helper($getRoute);
+?>	
+<div class="navbar-expand-md">
+	<div class="collapse navbar-collapse" id="navbar-menu">
+		<div class="navbar navbar-light">
+			<div class="container-xl">
+				<ul class="navbar-nav">
+					<li class="nav-item <?php echo ($getRoute == 'home')?'active':'';?>">
+						<a class="nav-link" href="<?php echo $this->url('home', array('action' => 'index')); ?>" >
+							<span class="nav-link-icon d-md-none d-lg-inline-block">
+								<i class="icon ti ti-home"></i>
+							</span>
+							<span class="nav-link-title">
+							གདོང་ཤོག།
+							</span>
+						</a>
+					</li>
+				<?php $menus = $this->menu_helper();
+				if(isset($menus)):
+				if(sizeof($menus)>0):
+					foreach ($menus as $key=>$menu): extract($menu);
+						if ( !is_array($menuItems) ): ?>
+					<li class="nav-item <?php echo ($getRoute == $route)?'active':'';?>">
+						<a class="nav-link" href="<?php echo $this->url($route, array('action' => $action)); ?>" >
+							<span class="nav-link-icon d-md-none d-lg-inline-block">
+								<i class="icon <?php echo $icon;?>"></i>
+							</span>
+							<span class="nav-link-title">
+								<?php echo $menu; ?>
+							</span>
+						</a>
+					</li>
+				<?php 	else: 
+							$condition = ($getResource == $this->getresource_helper($route));?>
+					<li class="nav-item dropdown <?php echo ($condition)?'active':'';?>">
+						<a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
+							<span class="nav-link-icon d-md-none d-lg-inline-block">
+								<i class="icon <?php echo $icon;?>"></i>
+							</span>
+							<span class="nav-link-title">
+								<?php echo $menu; ?>
+							</span>
+						</a>
+						<div class="dropdown-menu">
+						<?php foreach ($menuItems as $key=>$menuitem): ?>
+							<?php extract($menuitem); ?>		                     
+							<?php if(!is_array($submenuItems)):?>
+							<?php 
+								$condition1 = ($getResource == $this->getresource_helper($route));
+								$condition2 = ($getRoute == $route);
+							?>
+							<a class="dropdown-item <?php echo ($condition1 && $condition2)?'active':'';?>" href="<?php echo $this->url($route); ?>" >
+								<?php echo $menu; ?>
+							</a>
+							<?php else: 
+								$condition1 = ($getResource == $this->getresource_helper($route));
+								$condition2 = ($getRoute == $route);
+							?>
+							<div class="dropend">
+								<a class="dropdown-item dropdown-toggle <?php echo ($condition1 && $condition2)?'active':'';?>" href="#sidebar-authentication" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
+									<?php echo $menu; ?>
+								</a>
+								<div class="dropdown-menu">
+									<?php foreach ($submenuItems as $submenuItem):?>
+									<a href="<?php echo $this->url($route, array('action' => $submenuItem['action'])); ?>" class="dropdown-item">
+										<?php echo $submenuItem['menu']; ?></a>
+									<?php endforeach;?>
+								</div>
+							</div>
+							<?php endif; endforeach;?>
+						</div>
+					</li>
+					<?php endif; endforeach; endif; endif;?>
+				</ul>
+				<div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+					<form action="." method="get">
+					<div class="input-icon">
+						<span class="input-icon-addon">
+							<i class="icon ti ti-search"></i>
+						</span>
+						<input type="text" class="form-control" placeholder="Search…" aria-label="Search…">
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

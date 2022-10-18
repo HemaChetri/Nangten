@@ -1,0 +1,38 @@
+<?php 
+/**
+ * View -- of Nangten/StatueController/addstatueimageAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach($statue as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title"><i class="icon ti ti-user-plus"></i><?php echo $this->title;?></h3>
+					</div>
+					<form id="#form" method="post" action="<?php echo $this->url('statue', array('action' => 'addstatueimage','id' => $row['id'])); ?>" enctype="multipart/form-data">                  
+						<div class="modal-header">
+							<h4 class="modal-title"> <i class="icon ti ti-edit"></i><?php echo $this->title; ?></h4>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>  <!-- /modal-header -->
+						<input type="hidden" name="statue_id" id="statue_id" value="<?php echo $row['id'];?>">
+						<div class="modal-body">   
+							<div class="form-group col-lg-6">
+								<label for="recipient-name" class="control-label"> Select Ritual Object Image:</label>
+								<input type="file" name="image-file" id="uploadfile" >
+							</div>
+						</div> <!-- /modal-body -->    
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+							<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

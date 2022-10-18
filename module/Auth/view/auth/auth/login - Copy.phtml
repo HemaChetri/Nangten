@@ -1,0 +1,79 @@
+<?php
+/**
+ * Auth --- login
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?> 
+<div class="container-tight">
+	<div class="text-center">
+		<a href="<?php echo $this->url('auth', array('action' => 'login'));?>" class="navbar-brand navbar-brand-autodark"><img src="<?php echo $this->basePath() . '/images/front_logo.png'; ?>" alt="PMS-FSAPP"></a>
+	</div>
+	<form id="#form" class="card card-md" action="<?php echo $this->url('auth', array('action' => 'login'));?>" method="POST">
+		<div class="card-body">
+			<h2 class="card-title text-center">Login to your account</h2>
+			<div class="mb-3">
+                <label class="form-label">Username: Email or Mobile no.</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="icon ti ti-user"></i></span>
+                    <input type="text" class="form-control" name="username" placeholder="Username">
+                </div>
+            </div>
+			<div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="icon ti ti-lock"></i></span>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+            </div>
+			<div class="mb-2">
+			<label class="form-check">
+				<input type="checkbox" class="form-check-input"/>
+				<span class="form-check-label">Remember me on this device</span>
+			</label>
+			</div>
+			<div class="form-footer">
+				<button type="submit" class="btn btn-primary w-100"><i class="icon ti ti-key"></i>Sign in</button>
+			</div>
+		</div>
+		<div class="hr-text">or</div>
+		<div class="text-center text-muted mt-3 mb-3">
+			<a href="<?php echo $this->url('auth', array('action' => 'forgotpwd')); ?>" tabindex="-1">I forgot password</a>
+		</div>
+	</form>
+</div>
+<script>
+	document.addEventListener('DOMContentLoaded', function (e) {
+		FormValidation.formValidation(document.getElementById('#form'), {
+			fields: {
+				username: {
+					validators: {
+						notEmpty: {
+							message: 'The username is required',
+						},
+						stringLength: {
+							min: 5,
+							max: 30,
+							message: 'The username must be more than 6 and less than 30 characters long',
+						},
+					},
+				},
+				password: {
+					validators: {
+						notEmpty: {
+							message: 'The password is required',
+						},
+					},
+				},
+			},
+			plugins: {
+				trigger: new FormValidation.plugins.Trigger(),
+				bootstrap5: new FormValidation.plugins.Bootstrap5({
+					rowSelector: '.mb-3',
+				}),
+				submitButton: new FormValidation.plugins.SubmitButton(),
+				defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+			},
+		});
+	});
+</script>

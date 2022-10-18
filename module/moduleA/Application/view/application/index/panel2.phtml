@@ -1,0 +1,111 @@
+<?php
+/**
+ * View -- of Application/IndexController/panel2Action
+ * chophel@athang.com
+ */
+$this->headTitle($title);
+?>
+<style>
+	 .card{
+
+transition: all 0.2s ease;
+cursor: pointer;
+}
+.card:hover{
+
+box-shadow: 5px 6px 6px 2px #e9ecef;
+transform: scale(1.1);
+}
+</style>
+<div class="container-xl">
+	<!-- Page title -->
+	<div class="page-header d-print-none">
+		<div class="row align-items-center">
+			<div class="col">
+				<!-- Page pre-title -->
+                <div class="page-pretitle">Overview</div>
+                <h2 class="page-title">Dashboard</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-deck row-cards">
+			<div class="col-lg-4">
+                <div class="card">
+                  	<div class="card-body">
+						<a href="<?php echo $this->url('ritual', array('action'=>'ritual')); ?>">
+							<div class="mx-auto d-block">
+								<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Dorjee.svg';?>" />
+								<div class="card-body block">
+									<h4 class="card-title fs-1"><strong>མཆོད་ཆས།</strong></h4>
+								</div>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+                <div class="card">
+					<div class="card-body">
+						<a href="<?php echo $this->url('statue', array('action'=>'statue')); ?>">
+							<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Buddha.svg';?>" />
+							<div class="card-block">
+								<h4 class="card-title fs-1"><strong>སྐུ་རྟེན།</strong></h4>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+                <div class="card">
+					<div class="card-body">
+						<a href="<?php echo $this->url('stupa', array('action'=>'stupa')); ?>">
+							<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Stupa.svg';?>" />
+							<div class="card-block">
+								<h4 class="card-title fs-1"><strong>མཆོད་རྟེན།</strong></h4>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+                <div class="card">
+					<div class="card-body">
+						<a href="<?php echo $this->url('pecha', array('action'=>'pecha')); ?>">
+							<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Text.svg';?>" />
+							<div class="card-block">
+								<h4 class="card-title fs-1"><strong>གསུང་རྟེན།</strong></h4>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+                <div class="card">
+					<div class="card-body">
+						<a href="<?php echo $this->url('thanka', array('action'=>'thanka')); ?>">
+							<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Thangka.svg';?>" />
+							<div class="card-block">
+								<h4 class="card-title fs-1"><strong>ཐང་ཀ།</strong></h4>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+                <div class="card">
+					<div class="card-body">
+					<a href="<?php echo $this->url('debri', array('action'=>'debri')); ?>">
+						<img class="card-img-top img-fluid" src="<?php echo $this->basePath() . '/icons/Wall_paint.svg';?>" />
+							<div class="card-block">
+								<h4 class="card-title fs-1"><strong>ལྡེབ་རིས།</strong></h4>
+							</div>
+						</a>
+					</div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>

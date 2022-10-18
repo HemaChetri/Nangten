@@ -1,0 +1,45 @@
+<?php
+/**
+ * View -- of Acl/LogsController/activitylogAction
+ * chophel@athang.com
+ */
+?>
+<div class="modal-header">
+	<h4 class="modal-title"> <i class="ti ti-paperclip"></i><?php echo $this->title; ?></h4>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>  <!-- /modal-header -->
+<div class="modal-body">  
+	<table class="table table-vcenter table-bordered">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Timestamp</th>
+				<th>Username</th>
+				<th>Role</th>
+				<th>Status</th>
+				<th>Remarks</th>		
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			if(sizeof($this->activitylogs) > 0):
+				$i = 1; foreach ($this->activitylogs as $log):?>
+					<tr>
+						<td><?php echo $i++; ?> </td>
+						<td><?php echo $this->dateformat($log['modified'],1);?></td>
+						<td><?php echo $this->usersObj->getColumn($log['author'],'name'); ?></td>
+						<td><?php echo $this->roleObj->getColumn($log['role'],'role');?></td>
+						<td><?php echo $this->status($log['status']);?></td>
+						<td><?php echo $log['remarks']; ?></td>								
+					</tr>
+			<?php endforeach;
+			else:
+				?> <tr><td colspan="4"><span class="label label-warning">
+							&nbsp; * <i> No Activity Log recorded as of now</i> &nbsp;
+					</span></td> </tr>
+				<?php 
+			endif;
+			?>
+		</tbody>
+	</table>
+</div>

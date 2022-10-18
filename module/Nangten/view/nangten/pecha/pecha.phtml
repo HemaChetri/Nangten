@@ -1,0 +1,173 @@
+<?php 
+/**
+ * View -- of Nangten/PechaController/pechaAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+				<?php echo $this->partial('nangten/partial.phtml',array('active'=>'pecha'));?>
+					<div class="card-header">
+						<div class="col-9">
+							<form method="POST" action="<?php echo $this->url('pecha', array('action' =>'pecha','id'=>$page)); ?>"  enctype="multipart/form-data" >    
+								<div class="row">
+									<div class="form-group mb-3 col-lg-4">
+										<label for="dzongkhag" class="form-label"><h3>རྫོང་ཁག།</h3></label>
+										<select class="form-control" id="dzongkhag" name="dzongkhag" data-placeholder="Select" onchange='this.form.submit()'>
+											<option value="-1" <?php echo ($data['dzongkhag'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($dzongkhag as $dzongkhags):
+												$selected = ($data['dzongkhag']==$dzongkhags['id'])?'selected':'';?>
+												<option value="<?php echo $dzongkhags['id']; ?>" <?php echo $selected?>>
+												<?php echo $dzongkhags['DzongkhagNameDz']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-4">
+										<label for="category" class="form-label"><h3>དབྱེ་ཁག།</h3></label>
+										<select class="form-control" id="category" name="category" data-placeholder="Select" onchange='this.form.submit()'>
+											<option value="-1" <?php echo ($data['category'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($category as $categorys):
+												$selected = ($data['category']==$categorys['id'])?'selected':'';?>
+												<option value="<?php echo $categorys['id']; ?>" <?php echo $selected?>>
+												<?php echo $categorys['category']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-4">
+										<label for="subcategory" class="form-label"><h3>དབྱེ་ཁག་གི་ནང་གསེས།</h3></label>
+										<select class="form-control" id="subcategory" name="subcategory" data-placeholder="Select" onchange='this.form.submit()'>
+											<option value="-1" <?php echo ($data['subcategory'] == '-1')?'selected':'';?>>All</option><?php
+											foreach($subcategory as $subcategorys):
+												$selected = ($data['subcategory']==$subcategorys['id'])?'selected':'';?>
+												<option value="<?php echo $subcategorys['id']; ?>" <?php echo $selected?>>
+												<?php echo $subcategorys['sub_category']; ?>
+												</option><?php
+											endforeach; ?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-auto ms-auto d-print-none">
+							<div class="btn-list">
+							<?php echo $this->button(2);?>
+							</div>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap datatable" id="dataTables">
+							<thead>
+								<tr>
+								<th>#</th>
+								<th><h4>རྫོང་ཁག་</h4></th>
+								<th><h4>རྒེད་འོག་</h4></th>
+								<th><h4>གཡུས་</h4></th>
+								<th><h4>ལྷ་ཁང་གི་མིང</h4></th>
+								<th><h4>དབྱེ་བ་གཞན</h4></th>
+								<th><h4>མཚན་གསལ</h4></th>
+								<?php if($this->button(1)!=""):?>
+									<th class="no-sort no-printpdf">ལས།</th>
+								<?php endif;?>		
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1+(($page-1)*20); foreach ($paginator as $row):?>
+								<tr>
+									<td><?php  echo $i++; ?></td>								       
+									<td><strong><?php echo $row['DzongkhagNameDz']; ?></strong></td>
+									<td><?php echo $row['GewogNameDz']; ?></td>
+									<td><?php echo $row['VillageDz']; ?></td>
+									<td><?php echo $row['LhakhangNameDz']; ?></td>
+									<td><?php echo $row['LhaSectionNameDz']; ?></td>
+									<td><?php echo $row['TenDescriptionDz']; ?></td>
+									<?php if($this->button(1)!=""):?>
+										<td><?php echo $this->button(1, $row['id']);?></td>
+									<?php endif;?>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex align-items-center">
+						<?php echo $this->paginationControl($this->paginator,'Sliding','search_pagination.phtml', 
+							array('route' => 'pecha/paginator','action'=>'pecha','id'=>$data['dzongkhag']."_".$data['category']."_".$data['subcategory']));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	var title_table = "<?php echo $this->title;?>";
+	$('#dataTables').DataTable( {
+		dom: 'Bfrtip',
+		columnDefs: [ {
+			visible: false
+		} ],
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		buttons: [
+			{
+				extend: 'copy',
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-copy"></i> Copy',
+				titleAttr: 'Copy'
+			},
+			{
+				extend: 'csv',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-text"></i> Csv',
+				titleAttr: 'CSV'
+			},
+			{
+				extend: 'excel',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-file-export"></i> Excel',
+				titleAttr: 'Excel'
+			},
+			{
+				extend: 'pdfHtml5',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				orientation: 'landscape',
+				pageSize: 'LEGAL',
+				text: '<i class="icon ti ti-file-invoice"></i> Pdf',
+				titleAttr: 'PDF'
+			},
+			{
+				extend: 'print',
+				title: title_table,
+				exportOptions: {
+					columns: ':visible'
+				},
+				text: '<i class="icon ti ti-printer"></i> Print',
+				titleAttr: 'Print'
+			},	
+		],
+	});
+});
+</script>

@@ -1,0 +1,195 @@
+<?php
+/**
+ * View -- of Application/IndexController/panel4Action
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?>
+<div class="container-xl">
+	<!-- Page title -->
+	<div class="page-header d-print-none">
+		<div class="row align-items-center">
+			<div class="col">
+				<!-- Page pre-title -->
+                <div class="page-pretitle">Overview</div>
+                <h2 class="page-title">Dashboard</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-deck row-cards">
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Geo Reference of Project Implemnetation</h3>
+						<div id="map" class="leaflet-map"></div>
+						<?php $districts = $this->districtObj->getAll();
+							$locations = $this->locationObj->get(array('l.status'=>'1'));
+							$activities = $this->implementationObj->get(array('status'=>'8'));
+							echo $this->leaflet('map', $districts, $locations, $activities, $this->basePath(), '1');?>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">Budget Utilization of PIU: <?php echo $this->locationObj->getColumn($login_location,'location');?></h3>
+						<div id="chart7" class="canvas-chart"></div>
+						<?php $max_endorsed_fiscal = $this->workplanObj->getMax(array('status'=>'6'),'fiscal_year');
+						$Chart7Points = "";
+						$Total_Amount = array();
+						$login_location = 6;
+						$budget_amt1 = $this->workplanObj->getSum('total_budget_amount',array('location'=> $login_location,'fiscal_year'=>$max_endorsed_fiscal,'status'=>'6'));
+						$expense_amt1 = $this->implementationObj->getSum('expenditure',array('location'=> $login_location,'fiscal_year'=>$max_endorsed_fiscal,'status'=>'8'));
+						$contribution_cash1 = $this->implementationObj->getSum('contribution_cash',array('location'=> $login_location,'fiscal_year'=>$max_endorsed_fiscal,'status'=>'8'));
+						$contribution_kind1 = $this->implementationObj->getSum('contribution_kind',array('location'=> $login_location,'fiscal_year'=>$max_endorsed_fiscal,'status'=>'8'));
+						
+						$budget_amt1 = floatval(preg_replace('/[^\d.]/', '', $budget_amt1));
+						$expense_amt1 = floatval(preg_replace('/[^\d.]/', '', $expense_amt1));
+						$contribution_cash1 = floatval(preg_replace('/[^\d.]/', '', $contribution_cash1));
+						$contribution_kind1 = floatval(preg_replace('/[^\d.]/', '', $contribution_kind1));
+						
+						$Total_Amount = array(
+							array("y"=>$budget_amt1,"label"=>"Work Plan Budget"),	
+							array("y"=>$expense_amt1,"label"=>"Implementation Expenditure"),	
+							array("y"=>$contribution_cash1,"label"=>"Beneficiary Contribution (Cash)"),	
+							array("y"=>$contribution_kind1,"label"=>"Beneficiary Contribution (Kind)"),	
+						);
+						$Chart7Points = "{type: 'column', toolTipContent: '{label}: {y} (Nu.)', indexLabel: '{y}', dataPoints: ".json_encode($Total_Amount,JSON_NUMERIC_CHECK)."}";
+						
+						$axisY = "Total Amount (Nu.)"; 
+						echo $this->canvas('chart7',$Chart7Points,'',$axisY);?>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">No. of Beneficiaries in each Dzongkhag</h3>
+						<div id="chart1" class="canvas-chart"></div>
+						<?php $districts = $this->districtObj->get(array('status'=>'1'));
+						$Total_Beneficiary_in_each_district = array();
+						$Total_Female_Beneficiary_in_each_district = array();
+						foreach($districts as $district):
+							$total_beneficiary = $this->beneficiaryObj->getCountDistinct('house_hold_no', array('district'=>$district['id']));
+							$total_female_beneficiary = $this->beneficiaryObj->getCountDistinct('house_hold_no', array('district'=>$district['id'],'gender'=>'F'));
+							array_push($Total_Beneficiary_in_each_district, array("y"=>$total_beneficiary,"label"=>$district['DzongkhagNameEn']));
+							array_push($Total_Female_Beneficiary_in_each_district, array("y"=>$total_female_beneficiary,"label"=>$district['DzongkhagNameEn']));
+						endforeach;?>
+					</div>
+                </div>
+			</div>
+			<div class="col-lg-6">
+                <div class="card">
+                  	<div class="card-body">
+                    	<h3 class="card-title">No. of Farmer Groups in each Dzongkhag</h3>
+						<div id="chart2" class="canvas-chart"></div>
+						<?php 
+						$Production_in_each_district = array();
+						$Marketing_in_each_district = array();
+						$Processing_in_each_district = array();
+						$School_Linkages_in_each_district = array();
+						foreach($districts as $district):
+							$total_production = $this->farmergroupObj->getCountDistinct('id', array('district'=>$district['id'],'type_of_group'=>'1'));
+							$total_marketing = $this->farmergroupObj->getCountDistinct('id', array('district'=>$district['id'],'type_of_group'=>'2'));
+							$total_processing = $this->farmergroupObj->getCountDistinct('id', array('district'=>$district['id'],'type_of_group'=>'3'));
+							array_push($Production_in_each_district, array("y"=>$total_production,"label"=>$district['DzongkhagNameEn']));
+							array_push($Marketing_in_each_district, array("y"=>$total_marketing,"label"=>$district['DzongkhagNameEn']));
+							array_push($Processing_in_each_district, array("y"=>$total_processing,"label"=>$district['DzongkhagNameEn']));
+							$distinct_farmer_group = $this->farmergroupObj->getDistinct('id', array('district'=>$district['id']));
+							$count_school_linkages = $this->schoollinkObj->getCount(array('farmer_group'=>$distinct_farmer_group));
+							array_push($School_Linkages_in_each_district, array("y"=>$count_school_linkages,"label"=>$district['DzongkhagNameEn']));
+						endforeach;?>
+					</div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+		var chart2 = new CanvasJS.Chart("chart2", {
+			theme: "light2",
+			colorSet: "sandColorSet",
+			exportFileName: "No. of Farmer Groups in each Dzongkhag",
+            exportEnabled: true,
+			animationEnabled: true,
+			legend: {
+                verticalAlign: "bottom",
+                horizontalAlign: "center"
+            },
+            axisY: {
+                title: "No. of Farmer Groups",
+            },
+            data: [
+			{
+				type: "stackedColumn",
+				toolTipContent: "{label}: {y} Production FG",
+				legendText: "Production FG",
+				showInLegend: "true",
+				indexLabelPlacement: "outside",
+				dataPoints: <?php echo json_encode($Production_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}, {
+				type: "stackedColumn",
+				toolTipContent: "{label}: {y} Marketing FG",
+				legendText: "Marketing FG",
+				showInLegend: "true",
+				indexLabelPlacement: "outside",
+				dataPoints: <?php echo json_encode($Marketing_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}, {
+				type: "stackedColumn",
+				toolTipContent: "{label}: {y} Processing FG",
+				legendText: "Processing FG",
+				showInLegend: "true",
+				indexLabel: "#total",
+				indexLabelPlacement: "outside",
+				dataPoints: <?php echo json_encode($Processing_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}, {
+				type: "line",
+				toolTipContent: "{label}: {y} Schools Linked",
+				legendText: "No. of Schools Linked",
+				showInLegend: "true",
+				dataPoints: <?php echo json_encode($School_Linkages_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}
+            ]
+        });
+        chart2.render();
+
+        var chart1 = new CanvasJS.Chart("chart1", {
+			theme: "light2",
+			colorSet:  "rusticColorSet",
+			exportFileName: "No. of Beneficiaries in each Dzongkhag",
+            exportEnabled: true,
+			animationEnabled: true,
+			legend: {
+                verticalAlign: "bottom",
+                horizontalAlign: "center"
+            },
+            axisY: {
+                title: "No. of Beneficiaries",
+            },
+            data: [
+			{
+				type: "stackedBar",
+				toolTipContent: "{label}: {y} Female Beneficiaries",
+				legendText: "Female Beneficiaries",
+				showInLegend: "true",
+				indexLabel: "{y}",
+				indexLabelPlacement: "outside",
+				dataPoints: <?php echo json_encode($Total_Female_Beneficiary_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}, {
+				type: "stackedBar",
+				toolTipContent: "{label}: #total Total Beneficiaries",
+				legendText: "Total Beneficiaries",
+				showInLegend: "true",
+				indexLabel: "#total",
+				indexLabelPlacement: "outside",
+				dataPoints: <?php echo json_encode($Total_Beneficiary_in_each_district, JSON_NUMERIC_CHECK); ?>
+			}
+            ]
+        });
+        chart1.render();
+	});
+</script>

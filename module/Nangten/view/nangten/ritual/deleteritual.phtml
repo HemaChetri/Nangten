@@ -1,0 +1,26 @@
+<?php 
+/**
+ * View -- of Nangten/RitualController/deleteritual
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($ritual as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('ritual', array('action' => 'deleteritual','id'=>$row['id'])); ?>" enctype="multipart/form-data">                  
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="icon fas fa-trash-alt"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body"> 
+	    <input type="hidden" name="ritual_id" value="<?php echo $row['id'];?>" />
+		<div class="row">
+			<div class="alert alert-warning"> 
+				<b><WARNING</b> Are you sure you want to remove the ritual object detail?<br>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger"><i class="icon ti ti-trash"></i> Remove</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i> Cancel</button> 
+    </div>
+</form>

@@ -1,0 +1,88 @@
+<?php
+/**
+ * View -- of Administration/MasterController/editdistrict
+ * chophel@athang.com
+ */
+?>
+<?php foreach($districts as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('setmaster', array('action' => 'editdistrict','id'=>$page)); ?>" enctype="multipart/form-data">
+	<div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">
+		<div class="row"> 
+			<input type="hidden" id="district_id" name="district_id" value="<?php echo $row['id'];?>" />
+			<div  class="form-group mb-3">
+				<label for="DzongkhagNameEn" class="form-label">Dzongkhag Name En</label>
+				<input class="form-control" value="<?php echo $row['DzongkhagNameEn'];?>" type="text" name="DzongkhagNameEn" id="DzongkhagNameEn" placeholder="Dzongkhag Name En" required />
+			</div>
+			<div  class="form-group mb-3">
+				<label for="DzongkhagNameDz" class="form-label">Dzongkhag Name Dz</label>
+				<input class="form-control" value="<?php echo $row['DzongkhagNameDz'];?>" type="text" name="DzongkhagNameDz" id="DzongkhagNameDz" placeholder="Dzongkhag Name Dz" required />
+			</div>
+			<div  class="form-group mb-3">
+				<label for="status" class="form-label">Status</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="1" <?php echo ($row['status']=='1')?"checked":"";?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="0" <?php echo ($row['status']=='0')?"checked":"";?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+    </div> <!-- /modal-body -->
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$('document').ready(function(){
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			DzongkhagNameEn: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Dzongkhag Name En.'
+					}
+				}
+			},
+			DzongkhagNameDz: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Dzongkhag Name Dz.'
+					}
+				}
+			},
+			status: {
+				validators: {
+					notEmpty: {
+						message: 'Please select status.'
+					}
+				}
+			},
+		},
+		plugins: {
+			trigger: new FormValidation.plugins.Trigger(),
+			bootstrap5: new FormValidation.plugins.Bootstrap5({
+				rowSelector: '.mb-3',
+			}),
+			submitButton: new FormValidation.plugins.SubmitButton(),
+			defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+		},
+	}).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+});
+</script>

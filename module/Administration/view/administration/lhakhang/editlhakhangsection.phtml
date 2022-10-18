@@ -1,0 +1,130 @@
+<?php 
+/**
+ * View -- of Administration/LhakhangController/editlhakhangsection
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($lhakhangsection as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('lhakhang', array('action' => 'editlhakhangsection','id'=>$page)); ?>"  enctype="multipart/form-data" >                  
+    <div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-circle-plus"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+		<input type="hidden" name="lhakhangsection_id" value="<?php echo $row['id'];?>">
+			<div class="form-group mb-3 col-lg-6">  
+				<label class="form-label" for="GewogId">རྒེད་འོག།</label>
+				<select id="GewogId" name="GewogId" class="form-select" data-placeholder="Select">
+					<?php foreach($gewog as $gewogs):?>
+						<option value="<?php echo $gewogs['id']?>" <?php echo ($row['GewogId']==$gewogs['id'])?'selected':'';?>> 
+							<?php echo $gewogs['GewogNameDz'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-6">  
+				<label class="form-label" for="LhakhangId">ལྷ་ཁང།</label>
+				<select id="LhakhangId" name="LhakhangId" class="form-select" data-placeholder="Select">
+					<?php foreach($lhakhang as $lhakhangs):?>
+						<option value="<?php echo $lhakhangs['id']?>" <?php echo ($row['LhakhangId']==$lhakhangs['id'])?'selected':'';?>> 
+							<?php echo $lhakhangs['LhakhangNameDz'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label class="form-label" for="SectionNameEn">ནང་གསེས།(English)</label>
+				<input type="text" class="form-control" name="SectionNameEn" id="SectionNameEn" value=<?php echo $row['SectionNameEn'];?> placeholder="Section Name(English)" required /> 
+			</div>
+			<div class="form-group mb-3 col-lg-6"> 
+				<label class="form-label" for="SectionNameDz">ནང་གསེས།(Dzongkha)</label>
+				<input type="text" class="form-control" name="SectionNameDz" id="SectionNameDz" value=<?php echo $row['SectionNameDz'];?> placeholder="Section Name (Dzongkha)" /> 
+			</div>
+		</div>
+		<div  class="form-group mb-3 col-lg-4">
+				<label for="status" class="form-label">གནས་སྟངས།</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="1" <?php echo ($row['status']=='1')?"checked":"";?> />
+						<span class="form-check-label">ཨྀན།</span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="status" id="status" value="0" <?php echo ($row['status']=='0')?"checked":"";?> />
+						<span class="form-check-label">མཻན།</span>
+					</label>
+				</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	$('select#GewogId').on('change', function(){
+	$.post(
+		 "<?php echo $this->url("lhakhang", array("action" => "getlhakhang")); ?>",
+            {
+                gewogId: $(this).val(),
+            },
+            function(data){
+                $("select#LhakhangId").html(data.lhakhangValue);
+                $('select#LhakhangId').trigger('chosen:updated');
+            },
+            'json'
+        );
+    });
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+		fields: {
+			GewogId: {
+				validators: {
+					notEmpty: {
+						message: 'Please select Gewog.'
+					}
+				}
+			},
+			LhakhangId: {
+				validators: {
+					notEmpty: {
+						message: 'Please select Lhakhang.'
+					}
+				}
+			},
+			SectionNameEn: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide Section Name.'
+					}
+				}
+			},
+			SectionNameDz: {
+				validators: {
+					notEmpty: {
+						message: 'Please select Section Name.'
+					}
+				}
+			},
+		},
+		plugins: {
+			trigger: new FormValidation.plugins.Trigger(),
+			bootstrap5: new FormValidation.plugins.Bootstrap5({
+				rowSelector: '.mb-3',
+			}),
+			submitButton: new FormValidation.plugins.SubmitButton(),
+			defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+		},
+	}).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+});
+</script>

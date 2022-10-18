@@ -1,0 +1,141 @@
+<?php 
+/**
+ * View -- of Nangten/PechaController/viewpechaAction
+ * chophel@athang.com 
+ */
+	$this->headTitle($this->title);
+?>
+<?php foreach($pecha as $row);?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="col-2">
+							<?php echo $this->button(3,$row['id']);?>
+						</div>
+						<div class="col-2">
+							<?php echo $this->button(6,$row['id'],'','268');?>
+						</div>
+						<div class="col-2">
+							<?php echo $this->button(6,$row['id'],'','266');?>
+						</div>
+					</div>
+					<div class="row row-cards">
+              			<div class="col-lg-4">
+							<div class="card">
+								<div class="card-body text-center">
+									<div class="mb-3">
+										<span class="avatar avatar-xl img-thumbnail" style="background-image: url(<?php echo $this->basePath()."/upload/pechha/".$row['TenImage'];?>)"></span>
+									</div>
+								</div>
+								<hr style="margin: 1rem 0;">
+								<div class="card-header">
+									<h3 class="card-title">Categorization</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5">Category:</dt>
+										<dd class="col-7"><?php echo $this->catObj->getColumn($row['category'],'category');?></dd>
+										<dt class="col-5">Sub-Category:</dt>
+										<dd class="col-7"><?php  echo $this->subcatObj->getColumn($row['subcategory'],'sub_category');?></dd>
+									</dl>
+								</div>
+								<div class="card-header">
+								<h3 class="card-title">Lhakhang Details</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5 fs-2">རྫོང་ཁག་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['DzongkhagNameDz'];?></dd>
+										<dt class="col-5 fs-2">རྒེད་འོག་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['GewogNameDz'];?></dd>
+										<dt class="col-5 fs-2">གཡུས་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['VillageDz'];?></dd>
+										<dt class="col-5 fs-2">ལྷ་ཁང་གི་མིང་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['LhakhangNameDz'];?></dd>
+										<dt class="col-5 fs-2">གསེས་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['LhaSectionNameDz'];?></dd>
+										<dt class="col-5 fs-2">བཞེངས་མི:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['LhaBuilderDz'];?></dd>
+										<dt class="col-5 fs-2">དུས་རབས:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['LhaCenturyDz'];?></dd>
+										<dt class="col-5 fs-2">དབྱེ་བ་གཞན་:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['LhaOwnerNameDz'];?></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-8">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Nangten Details</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5 fs-2">མཚན་གསལ:</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenDescriptionDz'];?></dd>
+										<dt class="col-5 fs-2">དབུ་ཤོག་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenFrontPageDz'];?></dd>
+										<dt class="col-5 fs-2">ཤོག་གུའི་དབྱེ་བ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenPaperDz'];?></dd>
+										<dt class="col-5 fs-2">ཡིག་རིགས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenCaligraphDz'];?></dd>
+										<dt class="col-5 fs-2">སྣག་ཚ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenInkDz'];?></dd>
+										<dt class="col-5 fs-2">ཤོག་གྲངས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenPagesDz'];?></dd>
+										<dt class="col-5 fs-2">རྩོམ་པ་པོ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenAuthorDz'];?></dd>
+										<dt class="col-5 fs-2">དཀྱུས་ཚད་སི་ཨེམ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenLengthdz'];?></dd>
+										<dt class="col-5 fs-2">ཚད་སི་ཨེམ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenSizeDz'];?></dd>
+										<dt class="col-5 fs-2">ལོ་ཚད</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenAgeDz'];?></dd>
+										<dt class="col-5 fs-2">སྤུར་རས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenCoverDz'];?></dd>
+										<dt class="col-5 fs-2">གདོང་དར</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenDongdarDz'];?></dd>
+										<dt class="col-5 fs-2">ཆབ་བཅིངས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenBeltRingDz'];?></dd>
+										<dt class="col-5 fs-2">གླེགས་ཤིང་རིས་མོ་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenDesign'];?></dd>
+										<dt class="col-5 fs-2">པོ་ཏི་གྲངས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenVolumeDz'];?></dd>
+										<dt class="col-5 fs-2">གོང་ཚད་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenCostDz'];?></dd>
+										<dt class="col-5 fs-2">ཉམས་སྐྱོན་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenConditionDz'];?></dd>
+										<dt class="col-5 fs-2">ངོས་འཛིན་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenIdentificationDz'];?></dd>
+										<dt class="col-5 fs-2">ལོ་རྒྱུས་</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenStoryDz'];?></dd>
+									</dl>
+								</div>
+								<div class="card-header">
+									<h3 class="card-title">Other details</h3>
+								</div>
+								<div class="card-body">
+									<dl class="row">
+										<dt class="col-5 fs-2">དཀོན་གཉེར་གྱི་མིང་རྟགས།</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenCaretakerDz'];?></dd>
+										<dt class="col-5 fs-2">ཞིབ་དཔྱོད་པའི་མིང་རྟགས།</dt>
+										<dd class="col-7 fs-2"><?php echo $row['TenCheckedByDz'];?></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->						

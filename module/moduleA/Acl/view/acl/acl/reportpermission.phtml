@@ -1,0 +1,122 @@
+<?php 
+/**
+ * chophel@athang.com --2022
+ * View -- of Acl/AclController/reportpermissionAction
+ */
+	$this->headTitle($this->title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+				<div class="card">
+				<?php echo $this->tabs_helper(array(27,28,29,30)); ?>
+					<div class="card-header">
+						<div class="col-6">
+							<form method="post" >
+								<div class="row">
+									<div class="form-group mb-3 col-lg-6">
+										<label for="module" class="form-label">Module</label>
+										<select id="module" name="module" class="form-select" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['resource']=='-1')?'selected':'';?>>Select Module</option>
+											<?php foreach($modules as $module):?>
+												<option value="<?php echo $module['id']?>" <?php echo ($data['resource']==$module['id'])?'selected':'';?>>
+													<?php echo $module['module'];?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+									<div class="form-group mb-3 col-lg-6">
+										<label for="report" class="form-label">Report</label>
+										<select id="report" name="report" class="form-select" data-placeholder="Select" >
+											<option value="-1" <?php echo ($data['report']=='-1')?'selected':'';?>>All</option>
+											<?php if($data['resource']!='-1'):foreach($this->aclObj->getReports($data['resource'],'-1') as $report):?>
+												<option value="<?php echo $report['id']?>" <?php echo ($data['report']==$report['id'])?'selected':'';?>>
+													<?php echo $report['menu'];?></option>
+											<?php endforeach;endif;?>
+										</select>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<?php if($data['resource']!='-1'):?>
+					<div class="table-responsive">
+						<table class="table card-table table-vcenter text-nowrap table-striped table-bordered datatable" id="dataTables">
+							<thead>
+								<tr>
+									<th>Report</th>
+									<th>Role Permission</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $reports = $this->aclObj->getReports($data['resource'],$data['report']);
+							foreach($reports as $report):
+								$title = $report['id'].". ".$report['menu']." (".$report['controller']."/".$report['action'].") ";?>
+								<tr>
+									<td><strong><?php echo $report['menu'];?></strong></td>
+									<td>
+										<div class="row">
+										<?php foreach($this->rolesObj->getAllExcept($this->highest_role) as $role): 
+											$check1 = $this->aclObj->isPresent(array('resource'=>$data['resource'],'id'=>$report['id'],'role'=>$role['id']));
+											$check2 = $this->roleaclObj->isPresent(array('a.resource'=>$data['resource'],'ra.acl'=>$report['id'],'ra.role'=>$role['id']));
+											$disabled = ($check1==1 || !$this->button(5))?'disabled':'';
+											$check_class = ($check1==1)?'background-color: red':'';
+											$check_id = $report['id']."_".$role['id'];
+											$checked = ($check1==1 || $check2==1)?'checked':'';
+										?>
+										<div class="col-lg-3 col-md-4">
+											<label class="form-check form-check-inline" for="<?php echo $check_id;?>" data-bs-toggle='tooltip' data-bs-placement='top' title="<?php echo $title;?>">
+												<input class="form-check-input" type="checkbox" style="<?php echo $check_class;?>" id="<?php echo $check_id;?>" name="role_acl" data-report="<?php echo $report['id']?>" data-role="<?php echo $role['id'];?>" <?php echo $checked;?> <?php echo $disabled;?>/>
+												<span class="form-check-label"><strong><?php echo $role['role'];?></strong></span>
+											</label>
+										</div>
+										<?php endforeach;?>
+										</div>
+									</td>
+								</tr>
+							<?php endforeach;?>
+							</tbody>
+						</table>
+					</div>
+					<?php endif;?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$('document').ready(function(){
+	$('#module,#report').change(function(){
+		window.location.href="<?php echo $this->url('acl',array('action'=>'reportpermission'));?>/"+$('#module').val()+"_"+$('#report').val();
+	});
+	$('input[type=checkbox]').each(function(){
+		$(this).bind('change',function(){
+			var element = $(this);
+			var data_report = element.attr('data-report');
+			var data_role = element.attr('data-role');
+			var data_check = (element.prop('checked'))? 1:0;
+			$.post(
+				"<?php echo $this->url('acl', array('action'=>'reportpermission'));?>",
+				{
+					data_report:data_report,
+					data_role:data_role,
+					data_check:data_check
+				},
+				function(data){
+					//console.log(data);
+					if(data.result == ''){
+						alert("Something Went Wrong Please Contact System Administrator.");
+					}
+				},
+				'json'
+			);
+		});
+	});
+});
+</script>

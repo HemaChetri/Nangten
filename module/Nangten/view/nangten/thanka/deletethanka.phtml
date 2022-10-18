@@ -1,0 +1,26 @@
+<?php 
+/**
+ * View -- of Nangten/ThankaController/deletethanka
+ * chophel@athang.com
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($thanka as $thankas);?>
+<form id="#form" method="post" action="<?php echo $this->url('thanka', array('action' => 'deletethanka','id'=>$thankas['id'])); ?>" enctype="multipart/form-data">                  
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="icon fas fa-trash-alt"></i> <?php echo $this->title; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body"> 
+	    <input type="hidden" name="thanka_id" value="<?php echo $thankas['id'];?>" />
+		<div class="row">
+			<div class="alert alert-warning"> 
+				<b><WARNING</b> Are you sure you want to remove the thanka detail?<br>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger"><i class="icon fas fa-trash-alt"></i> Remove</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon fas fa-x"></i> Cancel</button> 
+    </div>
+</form>

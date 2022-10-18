@@ -1,0 +1,219 @@
+<?php 
+/**
+ * View -- of Acl/ButtonController/editbutton
+ * chophel@athang.com -- 2022
+ */
+$this->headTitle($this->title);
+?>
+<?php foreach($acl as $row);?>
+<form id="#form" method="post" action="<?php echo $this->url('button', array('action' => 'editbutton','id'=>$page)); ?>"  enctype="multipart/form-data" >                  
+    <div class="modal-header">
+		<h4 class="modal-title"> <i class="icon ti ti-edit"></i> <?php echo $this->title.": ".$row['menu']; ?></h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>  <!-- /modal-header -->
+    <div class="modal-body">   
+		<div class="row">
+			<input type="hidden" id="acl_id" name="acl_id" value="<?php echo $row['id'];?>" />
+			<input type="hidden" id="resource" name="resource" value="<?php echo $row['resource'];?>" />
+			<div class="form-group mb-3 col-lg-4">  
+				<label for="btn" class="form-label">is Button</label>
+				<div>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="btn" id="btn" value="1" <?php echo ($row['btn']=='1')?"checked":"";?> />
+						<span class="form-check-label"> Yes </span>
+					</label>
+					<label class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="btn" id="btn" value="0" <?php echo ($row['btn']=='0')?"checked":"";?> />
+						<span class="form-check-label"> No </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mb-3 col-lg-4"> 
+				<label class="form-label" for="parent_page">Container Page</label>
+				<select class="form-select" name="parent_page" id="parent_page" data-placeholder="Select" > 
+					<option value="0" <?php echo ($row['parent_page'] == 0)?"selected":"";?> >-NA-</option>
+					<?php foreach($this->aclObj->get(array('resource'=>$row['resource'])) as $parent):?>
+					<option value="<?php echo $parent['id'];?>" <?php echo ($parent['id']==$row['parent_page'])?'selected':'';?>>
+						<?php echo $parent['menu']."(".$parent['route']."/".$parent['action'].")";?>
+					</option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-4">  
+				<label for="btn_type" class="form-label">Button Type</label>
+				<select class="form-select" name="btn_type" id="btn_type" data-placeholder="Select" >
+					<option value="0" <?php echo ($row['btn_type'] == 0)?"selected":"";?> >-NA-</option>
+					<option value="1" <?php echo ($row['btn_type'] == 1)?"selected":"";?> >Normal</option>
+					<option value="2" <?php echo ($row['btn_type'] == 2)?"selected":"";?> >Modal</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-3">
+				<label class="form-label" for="button_position">Button Position</label>
+				<select class="form-select" name="button_position" id="button_position" data-placeholder="Select" > 
+					<option value="0" <?php echo ($row['button_position']=='0')?'selected':'';?>>-NA-</option>
+					<?php foreach($btnpositions as $btnpos):?>
+					<option value="<?php echo $btnpos['id'];?>" <?php echo ($btnpos['id']==$row['button_position'])?'selected':'';?>>
+					<?php echo $btnpos['button_position'];?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="form-group mb-3 col-lg-3"> 
+				<label class="form-label" for="btn_label">Button Label</label>
+				<input type="text" class="form-control" value="<?php echo $row['btn_label'];?>" name="btn_label" id="btn_label" required /> 			
+			</div>
+			<div class="form-group mb-3 col-lg-6">
+				<label class="form-label" for="class">Button Class</label>
+				<?php $btn_array = explode(" ", $row['class']);?>
+				<select multiple="" class="form-select" name="class[]" id="class" data-placeholder="Select" >
+					<?php foreach($elements as $element):?>
+						<option value="<?php echo $element['class'];?>" <?php echo (in_array($element['class'],$btn_array))?'selected':'';?>>
+							<?php echo $element['class'];?>
+						</option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-3 col-lg-6">
+				<label class="form-label" for="icon">Menu Icon </label>
+				<?php $icon_dtls = $this->iconObj->get(array('icon' => $row['icon']));
+					if(sizeof($icon_dtls)==1):
+						foreach($icon_dtls as $dtl);
+						$type_id = $dtl['icon_type'];
+						$group_id = $dtl['icon_group'];
+						$icon = $row['icon'];
+					else:
+						$type_id = '-1';
+						$group_id = '-1';
+						$icon = '0';
+					endif;
+				?>
+				<div class="row">
+					<div class="col-md-4">
+						<select class="form-select" name="group" id="group" data-placeholder="Group" > 
+							<option value="-1" <?php echo ($group_id=='-1')?'selected':'';?>>All</option>
+							<?php foreach($this->icongroupObj->getColumnValue('icon_type',$type_id) as $group):?>
+								<option value="<?php echo $group['id'];?>" <?php echo ($group_id==$group['id'])?'selected':'';?>>
+									<?php echo $group['icon_group'];?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+					<div class="col-md-4">
+						<select class="form-select" name="icon" id="icon" data-placeholder="Icon" > 
+							<option value="0" <?php echo ($icon=='0')?'selected':'';?>>None</option>
+							<?php foreach($this->iconObj->getColumnValue('i.icon_group',$group_id) as $icon_row):?>
+								<option value="<?php echo $icon_row['icon'];?>" <?php echo ($icon==$icon_row['icon'])?'selected':'';?>>
+									<?php echo $icon_row['icon'];?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- /modal-body -->    
+    <div class="modal-footer">
+		<button type="submit" class="btn btn-success"><i class="icon ti ti-check"></i>Save</button>
+		<button type="button" class="btn btn-warning" data-bs-dismiss="modal"><i class="icon ti ti-x"></i>Cancel</button> 
+    </div>
+</form>
+<script>
+$(function(){
+	$('select#group').on('change',function(){
+		$.post(
+			"<?php echo $this->url('button', array('action' => 'geticongroupchange'));?>",
+			{
+				group: $(this).val(),
+			},
+			function(data){
+				//console.log(data);
+				$('select#icon').html(data.icon);
+				$('select#icon').trigger('chosen:updated');
+			},
+			'json'
+		   );
+	});
+	const fv = FormValidation.formValidation(document.getElementById('#form'), {
+        fields: {
+            btn: {
+				validators: {
+					notEmpty: {
+						message: 'Please choose button display.'
+					}
+				}
+			},
+			parent_page: {
+				validators: {
+					notEmpty: {
+						message: 'Please select container page.'
+					}
+				}
+			},
+			btn_type: {
+				validators: {
+					notEmpty: {
+						message: 'Please select button type.'
+					}
+				}
+			},
+			button_position: {
+				validators: {
+					notEmpty: {
+						message: 'Please select button position.'
+					}
+				}
+			},
+			btn_label: {
+				validators: {
+					notEmpty: {
+						message: 'Please provide button label.'
+					}
+				}
+			},
+			'class[]': {
+				validators: {
+					choice: {
+						min: 0,
+						max: 10,
+						message: 'Please choose 0 - 10 btn-class.',
+					},
+				}
+			},
+			group: {
+				validators: {
+					notEmpty: {
+						message: 'Please select icon group.'
+					}
+				}
+			},
+			icon: {
+				validators: {
+					notEmpty: {
+						message: 'Please select button icon.'
+					}
+				}
+			},
+        },
+        plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+                rowSelector: '.mb-3',
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        },
+    }).on('core.element.validated', function (e) {
+		if (e.valid) {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-invalid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-valid');
+		} else {
+			$('div#'+ e.field.replace('[]','') +'_chosen').removeClass('is-valid');
+			$('div#'+ e.field.replace('[]','') +'_chosen').addClass('is-invalid');
+		}
+	});
+	$('form select').chosen().change(function () {
+		fv.revalidateField($(this).attr('name'));
+	});
+});
+</script>

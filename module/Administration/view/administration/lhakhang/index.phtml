@@ -1,0 +1,43 @@
+<?php
+/**
+ * View -- of Administration/MasterController/indexAction
+ * chophel@athang.com
+ */
+	$this->headTitle($title);
+?>
+<div class="page-body">
+	<div class="container-xl">
+		<div class="row row-cards">
+			<div class="col-12">
+			<?php $menus = $this->menu_helper(4);
+			if(sizeof($menus)>0):
+				foreach($menus as $menu):?>
+				<?php extract($menu); ?>
+				<div class="card">
+					<div class="card-body">
+						<div class="card-header">
+							<h3 class="card-title"><i class="<?php echo $icon; ?>"></i> <?php echo $menu." (".$description.")"; ?></h3>
+						</div>
+						<div class="list-group list-group-flush">
+						<?php foreach ($menuItems as $key=>$menuitem): ?>
+						<?php extract($menuitem); ?>		                     
+						<?php if(!is_array($submenuItems)):?>
+							<a href="<?php echo $this->url($route); ?>" title="<?php echo $menu; ?>" class="list-group-item list-group-item-action active">
+								<strong><?php echo $menu; ?></strong><div class="text-muted text-truncate mt-n1"><?php echo $description;?></div>
+							</a>
+						<?php else: ?>							
+							<?php foreach ($submenuItems as $submenuItem):?>
+								<a href="<?php echo $this->url($route, array('action' => $submenuItem['action'])); ?>" class="list-group-item list-group-item-action active">
+									<strong><?php echo $submenuItem['menu']; ?></strong><div class="text-muted text-truncate mt-n1"><?php echo $submenuItem['description'];?></div>
+								</a>
+							<?php endforeach;?>
+						<?php endif; ?>   
+						<?php endforeach;?>
+						</div>
+					</div>
+				</div>
+				<?php  endforeach; endif;?>
+			</div>
+		</div>
+	</div>
+</div>
